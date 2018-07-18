@@ -14,7 +14,7 @@
         android:textColor="@color/primary_text"
         android:paddingStart="@dimen/padding_start_view"
         android:paddingEnd="@dimen/padding_start_view"
-        android:text="Hello, world!" />
+        />
 
     <ImageButton
         android:id="@+id/button"

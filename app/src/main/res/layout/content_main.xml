@@ -9,18 +9,19 @@
     tools:context=".mainactivity.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <com.leadinsource.prudentcook.mainactivity.IngredientView
-        android:layout_width="wrap_content"
+    <com.leadinsource.prudentcook.mainactivity.FlowLayout
+        android:id="@+id/choices"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        custom:text="Test"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+
+    </com.leadinsource.prudentcook.mainactivity.FlowLayout>
+
+
+
 
     <TextView
         android:id="@+id/textView2"
