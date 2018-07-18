@@ -1,4 +1,4 @@
-package com.leadinsource.prudentcook;
+package com.leadinsource.prudentcook.mainactivity;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.leadinsource.prudentcook.R;
 
 public class MainActivity extends AppCompatActivity {
 
