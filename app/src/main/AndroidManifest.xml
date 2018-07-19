@@ -3,9 +3,9 @@
     package="com.leadinsource.prudentcook">
 
     <application
+        android:name="app.PrudentCookApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:name="app.PrudentCookApp"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -19,6 +19,14 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".ingredientsactivity.IngredientsActivity"
+            android:label="@string/title_activity_ingredients"
+            android:parentActivityName=".mainactivity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.leadinsource.prudentcook.mainactivity.MainActivity" />
         </activity>
     </application>
 
