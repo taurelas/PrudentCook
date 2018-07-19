@@ -28,6 +28,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.leadinsource.prudentcook.mainactivity.MainActivity" />
         </activity>
+        <activity android:name=".recipeactivity.RecipeActivity"></activity>
     </application>
 
 </manifest>
