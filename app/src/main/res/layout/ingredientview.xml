@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@drawable/ingredient_background">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:textColor="@color/primary_text"
+        android:paddingStart="@dimen/padding_start_view"
+        android:paddingEnd="@dimen/padding_start_view"
+        />
+
+    <ImageButton
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_highlight_off_black_24dp"
+        android:background="@drawable/ingredient_background"
+        android:text=""
+        android:contentDescription="@string/remove_chosen_ingredient" />
+</LinearLayout>
