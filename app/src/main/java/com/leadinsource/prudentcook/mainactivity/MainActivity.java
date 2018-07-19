@@ -1,5 +1,6 @@
 package com.leadinsource.prudentcook.mainactivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.leadinsource.prudentcook.R;
+import com.leadinsource.prudentcook.ingredientsactivity.IngredientsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,7 @@ import model.Recipe;
 
 public class MainActivity extends AppCompatActivity implements RecyclerViewAdapter.OnClickListener {
 
+    private static final int INGREDIENT_REQUEST = 528;
     private FirebaseAnalytics firebaseAnalytics;
     private FlowLayout choiceLayout;
     private int counter = 0;
@@ -41,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Bundle bundle = new Bundle();
                 bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Floating Action Button");
                 firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
@@ -51,13 +55,13 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
                 choice.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(MainActivity.this, "Clicked "+v, Toast.LENGTH_SHORT).show();
+
                     }
                 });
 
                 choiceLayout.addView(choice, flowLP);
-
-
+                Intent intent = new Intent(MainActivity.this, IngredientsActivity.class);
+                startActivityForResult(intent, INGREDIENT_REQUEST);
 
             }
         });
@@ -104,5 +108,12 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     @Override
     public void onClick(RVItem item) {
         Toast.makeText(this, "Clicked "+item.getRecipeName(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode==INGREDIENT_REQUEST) {
+            Toast.makeText(this, "Result", Toast.LENGTH_SHORT).show();
+        }
     }
 }

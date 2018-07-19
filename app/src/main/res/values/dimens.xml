@@ -1,4 +1,6 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="padding_start_view">4dp</dimen>
+    <dimen name="ingredient_name_margin_v">8dp</dimen>
+    <dimen name="ingredient_name_margin_start">16dp</dimen>
 </resources>
