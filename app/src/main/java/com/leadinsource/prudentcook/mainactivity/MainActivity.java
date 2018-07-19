@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +16,13 @@ import android.widget.Toast;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.leadinsource.prudentcook.R;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.List;
+
+import model.RVItemImpl;
+import model.Recipe;
+
+public class MainActivity extends AppCompatActivity implements RecyclerViewAdapter.OnClickListener {
 
     private FirebaseAnalytics firebaseAnalytics;
     private FlowLayout choiceLayout;
@@ -55,6 +63,20 @@ public class MainActivity extends AppCompatActivity {
         });
 
         firebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        //test
+        List<RVItem> items = new ArrayList<>();
+        Recipe recipe = new Recipe("Spaghetti", "pasta, sauce", "Cook spaghetti, cook everything");
+        items.add(new RVItemImpl(recipe));
+        recipe = new Recipe("Brocolli and thyme", "thyme, brocolli, pasta, rice", "Cook rice & pasta\nRinse the spoon, add ketchup\nMix everything");
+        items.add(new RVItemImpl(recipe));
+        recipe = new Recipe("Spices", "salt, pepper, curry, THC, grated chees", "Mix everything\nUnmix everything\nSeparate the spices");
+        items.add(new RVItemImpl(recipe));
+        recyclerView.setAdapter(new RecyclerViewAdapter(items, this));
+        // end of test
     }
 
     @Override
@@ -77,5 +99,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(RVItem item) {
+        Toast.makeText(this, "Clicked "+item.getRecipeName(), Toast.LENGTH_SHORT).show();
     }
 }
