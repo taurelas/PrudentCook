@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.leadinsource.prudentcook.R;
 import com.leadinsource.prudentcook.ingredientsactivity.IngredientsActivity;
+import com.leadinsource.prudentcook.recipeactivity.RecipeActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
                 choice.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        // unselect ingredient
                     }
                 });
 
@@ -106,6 +107,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     @Override
     public void onClick(RVItem item) {
         Toast.makeText(this, "Clicked "+item.getRecipeName(), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(MainActivity.this, RecipeActivity.class);
+        startActivity(intent);
     }
 
     @Override
