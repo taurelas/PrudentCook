@@ -3,12 +3,10 @@ package com.leadinsource.prudentcook.mainactivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,7 +24,7 @@ import model.Recipe;
 
 public class MainActivity extends AppCompatActivity implements RecyclerViewAdapter.OnClickListener {
 
-    private static final int INGREDIENT_REQUEST = 528;
+    public static final int INGREDIENT_REQUEST = 528;
     private FirebaseAnalytics firebaseAnalytics;
     private FlowLayout choiceLayout;
     private int counter = 0;
@@ -98,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_submit) {
             return true;
         }
 
