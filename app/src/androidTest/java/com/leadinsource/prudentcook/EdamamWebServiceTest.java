@@ -1,17 +1,10 @@
 package com.leadinsource.prudentcook;
 
-import android.support.test.runner.AndroidJUnit4;
 import android.test.InstrumentationTestCase;
-
-import static org.junit.Assert.*;
 
 import com.leadinsource.prudentcook.model.Ingredient;
 import com.leadinsource.prudentcook.model.IngredientImpl;
 import com.leadinsource.prudentcook.net.WebService;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.List;
