@@ -12,8 +12,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.leadinsource.prudentcook.R;
+import com.leadinsource.prudentcook.data.Repository;
 import com.leadinsource.prudentcook.ingredientsactivity.IngredientsActivity;
 import com.leadinsource.prudentcook.recipeactivity.RecipeActivity;
 
@@ -38,7 +40,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         choiceLayout = findViewById(R.id.choices);
-
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,12 +75,15 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         List<RVItem> items = new ArrayList<>();
         Recipe recipe = new Recipe("Spaghetti", "pasta, sauce", "Cook spaghetti, cook everything");
         items.add(new RVItemImpl(recipe));
-        recipe = new Recipe("Brocolli and thyme", "thyme, brocolli, pasta, rice", "Cook rice & pasta\nRinse the spoon, add ketchup\nMix everything");
+        recipe = new Recipe("Broccoli and thyme", "thyme, broccoli, pasta, rice", "Cook rice & pasta\nRinse the spoon, add ketchup\nMix everything");
         items.add(new RVItemImpl(recipe));
-        recipe = new Recipe("Spices", "salt, pepper, curry, THC, grated chees", "Mix everything\nUnmix everything\nSeparate the spices");
+        recipe = new Recipe("Spices", "salt, pepper, curry, THC, grated cheese", "Mix everything\nUnmix everything\nSeparate the spices");
         items.add(new RVItemImpl(recipe));
         recyclerView.setAdapter(new RecyclerViewAdapter(items, this));
         // end of test
+        //another test, TODO move to ViewModel
+        new Repository();
+        // end of another test
     }
 
     @Override

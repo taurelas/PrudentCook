@@ -1,9 +1,17 @@
 package com.leadinsource.prudentcook.model;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
+
 public class Recipe {
 
-    private String name;
-    private String ingredients;
+    @SerializedName("label")
+    public String name;
+
+    public List<String> ingredientLines;
+
+    transient private String ingredients;
     private String steps;
 
 
