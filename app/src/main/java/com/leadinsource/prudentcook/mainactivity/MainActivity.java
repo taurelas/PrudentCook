@@ -20,8 +20,8 @@ import com.leadinsource.prudentcook.recipeactivity.RecipeActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.RVItemImpl;
-import model.Recipe;
+import com.leadinsource.prudentcook.model.RVItemImpl;
+import com.leadinsource.prudentcook.model.Recipe;
 
 public class MainActivity extends AppCompatActivity implements RecyclerViewAdapter.OnClickListener {
 
