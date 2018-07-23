@@ -1,4 +1,4 @@
-package model;
+package com.leadinsource.prudentcook.model;
 
 public class Recipe {
 

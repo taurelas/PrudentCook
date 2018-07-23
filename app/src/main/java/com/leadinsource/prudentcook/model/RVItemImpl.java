@@ -1,4 +1,4 @@
-package model;
+package com.leadinsource.prudentcook.model;
 
 import com.leadinsource.prudentcook.mainactivity.RVItem;
 
