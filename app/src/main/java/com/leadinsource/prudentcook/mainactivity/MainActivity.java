@@ -15,27 +15,29 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.leadinsource.prudentcook.R;
-import com.leadinsource.prudentcook.data.Repository;
 import com.leadinsource.prudentcook.ingredientsactivity.IngredientsActivity;
 import com.leadinsource.prudentcook.recipeactivity.RecipeActivity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import com.leadinsource.prudentcook.model.RVItemImpl;
-import com.leadinsource.prudentcook.model.Recipe;
+import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements RecyclerViewAdapter.OnClickListener {
 
     public static final int INGREDIENT_REQUEST = 528;
+    public static final String EXTRA_RECIPE_NAME = "EXTRA_RECIPE_NAME";
+    public static final String EXTRA_STEPS = "EXTRA_STEPS";
+    public static final String EXTRA_INGREDIENTS = "EXTRA_INGREDIENTS";
     private FirebaseAnalytics firebaseAnalytics;
     private FlowLayout choiceLayout;
-    private int counter = 0;
     private RecyclerView recyclerView;
     private MainActivityViewModel model;
+
+    private FlowLayout.LayoutParams flowLP;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,17 +69,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
                 bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Floating Action Button");
                 firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-                FlowLayout.LayoutParams flowLP = new FlowLayout.LayoutParams(5,5);
-                IngredientView choice = new IngredientView(MainActivity.this);
-                choice.setText("Cucumber no "+(++counter));
-                choice.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // unselect ingredient
-                    }
-                });
 
-                choiceLayout.addView(choice, flowLP);
                 Intent intent = new Intent(MainActivity.this, IngredientsActivity.class);
                 startActivityForResult(intent, INGREDIENT_REQUEST);
 
@@ -86,8 +78,40 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
 
         firebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
+        model.getChosenIngredients().observe(this, new Observer<ArrayList<String>>() {
+            @Override
+            public void onChanged(@Nullable ArrayList<String> ingredientNames) {
+                if(ingredientNames==null) return;
 
-        //test
+                choiceLayout.removeAllViews();
+                flowLP = new FlowLayout.LayoutParams(5,5);
+
+                for(final String ingredientName : ingredientNames) {
+                    IngredientView choice = new IngredientView(MainActivity.this);
+                    choice.setText(ingredientName);
+                    Timber.d("Processing %s!", ingredientName);
+                    choice.setClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Timber.d("Onclick!");
+                            model.removeChosenIngredient(ingredientName);
+
+                        }
+                    });
+
+                   /* choice.setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View v, MotionEvent event) {
+                            Timber.d("Onclick!");
+                            model.removeChosenIngredient(ingredientName);
+                            return false;
+                        }
+                    });*/
+                    Timber.d("Has onclicklisteners? %s", choice.hasOnClickListeners());
+                    choiceLayout.addView(choice, flowLP);
+                }
+            }
+        });
 
     }
 
@@ -117,13 +141,20 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     public void onClick(RVItem item) {
         Toast.makeText(this, "Clicked "+item.getRecipeName(), Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(MainActivity.this, RecipeActivity.class);
+        intent.putExtra(EXTRA_RECIPE_NAME, item.getRecipeName());
+        intent.putExtra(EXTRA_INGREDIENTS, item.getMissingIngredients());
+        intent.putExtra(EXTRA_STEPS, item.getRecipeExcerpt());
         startActivity(intent);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(data==null) return;
+
         if(requestCode==INGREDIENT_REQUEST) {
+            String[] chosenIngredients = data.getStringArrayExtra(EXTRA_INGREDIENTS);
             model.testData();
+            model.setChosenIngredients(new ArrayList<>(Arrays.asList(chosenIngredients)));
         }
     }
 }

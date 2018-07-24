@@ -5,12 +5,18 @@ import com.leadinsource.prudentcook.model.Recipe;
 
 public class RVItemImpl implements RVItem{
 
+    private RecipeData recipeData;
     Recipe recipe;
+    String recipeName;
 
     public RVItemImpl(Recipe recipe) {
         this.recipe = recipe;
     }
 
+    public RVItemImpl(String recipeName, RecipeData recipeData) {
+        this.recipeName = recipeName;
+        this.recipeData = recipeData;
+    }
 
     @Override
     public String getRecipeName() {

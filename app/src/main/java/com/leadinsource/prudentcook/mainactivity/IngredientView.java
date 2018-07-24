@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -49,9 +50,20 @@ public class IngredientView extends LinearLayout {
         return text.getText();
     }
 
-    @Override
+    /*@Override
     public void setOnClickListener(@Nullable OnClickListener l) {
+        Timber.d("Attaching listener %s", l);
         button.setOnClickListener(l);
         text.setOnClickListener(null);
+        super.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                button.performClick();
+            }
+        });
+    }*/
+
+    public void setClickListener(OnClickListener listener) {
+        button.setOnClickListener(listener);
     }
 }

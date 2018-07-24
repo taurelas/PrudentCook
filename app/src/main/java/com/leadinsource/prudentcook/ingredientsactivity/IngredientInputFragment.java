@@ -1,17 +1,24 @@
 package com.leadinsource.prudentcook.ingredientsactivity;
 
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-
+import android.widget.Toast;
 
 import com.leadinsource.prudentcook.R;
+
+import java.util.List;
 
 import timber.log.Timber;
 
@@ -28,10 +35,14 @@ public class IngredientInputFragment extends Fragment {
     private static final String[] INGREDIENTS = new String[]{
             "Basil", "Black Pepper", "Cardamom", "Chicken", "Eggs", "Flour", "Salt", "Zucchini"
     };
+    private Ingredients ingredients;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private AutoCompleteTextView actv;
+    private ArrayAdapter<String> adapter;
+    private IngredientsViewModel viewModel;
 
 
     public IngredientInputFragment() {
@@ -65,18 +76,47 @@ public class IngredientInputFragment extends Fragment {
         }
     }
 
+    // we set up the view. if we click on an item, it is added to viewmodel
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        if(getContext()==null) {
-            return null;
-        }
-
-        Timber.d("Creating ingredients input");
         View rootView = inflater.inflate(R.layout.ingredients_input, container, false);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_dropdown_item_1line, INGREDIENTS);
-        AutoCompleteTextView actv = rootView.findViewById(R.id.autoCompleteTextView);
-        actv.setAdapter(adapter);
+        actv = rootView.findViewById(R.id.autoCompleteTextView);
+        actv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                actv.setText("");
+                viewModel.addChosenIngredient((String) parent.getItemAtPosition(position));
+            }
+        });
+
+        actvDataSetup(INGREDIENTS);
         return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        viewModel = ViewModelProviders.of(getActivity()).get(IngredientsViewModel.class);
+
+        viewModel.getAvailableIngredients().observe(this, new Observer<List<String>>() {
+            @Override
+            public void onChanged(@Nullable List<String> ingredients) {
+                Timber.d("Ingredients changed");
+                if(ingredients==null) return;
+
+                actvDataSetup(ingredients.toArray(new String[ingredients.size()]));
+
+            }
+        });
+    }
+
+    public void actvDataSetup(String[] ingredients) {
+        if (getContext() == null) {
+            return;
+        }
+        adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_dropdown_item_1line, ingredients);
+        actv.setAdapter(adapter);
     }
 }

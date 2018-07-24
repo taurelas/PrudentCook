@@ -1,14 +1,17 @@
 package com.leadinsource.prudentcook.model;
 
-public class IngredientImpl implements Ingredient{
-
+public class IngredientImpl implements Ingredient {
 
     private final String name;
-    private final String nameWithQuantity;
+    private IngredientData data;
 
-    public IngredientImpl(String name, String nameWithQuantity) {
+    public IngredientImpl(String name, IngredientData data) {
         this.name = name;
-        this.nameWithQuantity = nameWithQuantity;
+        this.data = data;
+    }
+
+    public IngredientData getData() {
+        return data;
     }
 
     @Override

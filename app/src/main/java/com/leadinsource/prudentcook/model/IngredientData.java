@@ -1,6 +1,6 @@
 package com.leadinsource.prudentcook.model;
 
-public class Ingred {
+public class IngredientData {
     public String getUnit() {
         return unit;
     }
