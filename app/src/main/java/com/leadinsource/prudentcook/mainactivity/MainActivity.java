@@ -1,7 +1,10 @@
 package com.leadinsource.prudentcook.mainactivity;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,8 +15,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.leadinsource.prudentcook.R;
+import com.leadinsource.prudentcook.data.Repository;
 import com.leadinsource.prudentcook.ingredientsactivity.IngredientsActivity;
 import com.leadinsource.prudentcook.recipeactivity.RecipeActivity;
 
@@ -29,6 +34,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     private FirebaseAnalytics firebaseAnalytics;
     private FlowLayout choiceLayout;
     private int counter = 0;
+    private RecyclerView recyclerView;
+    private MainActivityViewModel model;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +44,20 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        choiceLayout = findViewById(R.id.choices);
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        model = ViewModelProviders.of(this).get(MainActivityViewModel.class);
+
+        model.getMatches().observe(this, new Observer<List<RVItem>>() {
+            @Override
+            public void onChanged(@Nullable List<RVItem> items) {
+                recyclerView.setAdapter(new RecyclerViewAdapter(items, MainActivity.this));
+            }
+        });
+
+        choiceLayout = findViewById(R.id.choices);
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,19 +86,9 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
 
         firebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         //test
-        List<RVItem> items = new ArrayList<>();
-        Recipe recipe = new Recipe("Spaghetti", "pasta, sauce", "Cook spaghetti, cook everything");
-        items.add(new RVItemImpl(recipe));
-        recipe = new Recipe("Brocolli and thyme", "thyme, brocolli, pasta, rice", "Cook rice & pasta\nRinse the spoon, add ketchup\nMix everything");
-        items.add(new RVItemImpl(recipe));
-        recipe = new Recipe("Spices", "salt, pepper, curry, THC, grated chees", "Mix everything\nUnmix everything\nSeparate the spices");
-        items.add(new RVItemImpl(recipe));
-        recyclerView.setAdapter(new RecyclerViewAdapter(items, this));
-        // end of test
+
     }
 
     @Override
@@ -114,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode==INGREDIENT_REQUEST) {
-            Toast.makeText(this, "Result", Toast.LENGTH_SHORT).show();
+            model.testData();
         }
     }
 }

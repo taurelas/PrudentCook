@@ -1,9 +1,11 @@
-package app;
+package com.leadinsource.prudentcook.app;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.util.Log;
 
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.FirebaseDatabase;
 import com.leadinsource.prudentcook.BuildConfig;
 
 import timber.log.Timber;
@@ -12,7 +14,7 @@ public class PrudentCookApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        FirebaseApp.initializeApp(this);
         if(BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         } else {
