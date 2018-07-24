@@ -4,13 +4,16 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:background="@drawable/ingredient_background">
+    android:clickable="true"
+    android:background="@drawable/ingredient_background"
+    android:focusable="true">
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
+        android:clickable="false"
         android:textColor="@color/primary_text"
         android:paddingStart="@dimen/padding_start_view"
         android:paddingEnd="@dimen/padding_start_view"
@@ -19,9 +22,11 @@
     <ImageButton
         android:id="@+id/button"
         android:layout_width="wrap_content"
+        android:clickable="true"
         android:layout_height="match_parent"
         android:src="@drawable/ic_highlight_off_black_24dp"
         android:background="@drawable/ingredient_background"
         android:text=""
-        android:contentDescription="@string/remove_chosen_ingredient" />
+        android:contentDescription="@string/remove_chosen_ingredient"
+        android:focusable="true" />
 </LinearLayout>

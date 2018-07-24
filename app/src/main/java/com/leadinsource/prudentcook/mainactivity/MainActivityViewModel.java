@@ -9,12 +9,13 @@ import com.leadinsource.prudentcook.model.RVItemImpl;
 import com.leadinsource.prudentcook.model.Recipe;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MainActivityViewModel extends ViewModel {
 
     private final Repository repository;
-    private MutableLiveData<List<String>> chosenIngredients = new MutableLiveData<>();
+    private MutableLiveData<ArrayList<String>> chosenIngredients = new MutableLiveData<>();
 
     public MainActivityViewModel() {
         repository = new Repository();
@@ -41,11 +42,21 @@ public class MainActivityViewModel extends ViewModel {
         matches.postValue(items);
     }
 
-    public void setChosenIngredients(List<String> chosenIngredients) {
+    public void setChosenIngredients(ArrayList<String> chosenIngredients) {
         this.chosenIngredients.postValue(chosenIngredients);
     }
 
-    public LiveData<List<String>> getChosenIngredients() {
+    public LiveData<ArrayList<String>> getChosenIngredients() {
         return chosenIngredients;
+    }
+
+    public void removeChosenIngredient(String ingredientName) {
+        ArrayList<String> list = chosenIngredients.getValue();
+
+        if(list==null) return;
+
+        list.remove(ingredientName);
+
+        chosenIngredients.postValue(list);
     }
 }

@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,6 +30,8 @@ import java.util.List;
 import com.leadinsource.prudentcook.model.RVItemImpl;
 import com.leadinsource.prudentcook.model.Recipe;
 
+import timber.log.Timber;
+
 public class MainActivity extends AppCompatActivity implements RecyclerViewAdapter.OnClickListener {
 
     public static final int INGREDIENT_REQUEST = 528;
@@ -38,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     private RecyclerView recyclerView;
     private MainActivityViewModel model;
     public static final String EXTRA_INGREDIENTS = "EXTRA_INGREDIENTS";
+    private FlowLayout.LayoutParams flowLP;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,24 +82,36 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
 
         firebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-        model.getChosenIngredients().observe(this, new Observer<List<String>>() {
+        model.getChosenIngredients().observe(this, new Observer<ArrayList<String>>() {
             @Override
-            public void onChanged(@Nullable List<String> ingredientNames) {
+            public void onChanged(@Nullable ArrayList<String> ingredientNames) {
                 if(ingredientNames==null) return;
-                FlowLayout.LayoutParams flowLP = new FlowLayout.LayoutParams(5,5);
 
+                choiceLayout.removeAllViews();
+                flowLP = new FlowLayout.LayoutParams(5,5);
 
-
-                for(String ingredientName : ingredientNames) {
+                for(final String ingredientName : ingredientNames) {
                     IngredientView choice = new IngredientView(MainActivity.this);
                     choice.setText(ingredientName);
-                    choice.setOnClickListener(new View.OnClickListener() {
+                    Timber.d("Processing %s!", ingredientName);
+                    choice.setClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            // unselect ingredient
+                            Timber.d("Onclick!");
+                            model.removeChosenIngredient(ingredientName);
+
                         }
                     });
 
+                   /* choice.setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View v, MotionEvent event) {
+                            Timber.d("Onclick!");
+                            model.removeChosenIngredient(ingredientName);
+                            return false;
+                        }
+                    });*/
+                    Timber.d("Has onclicklisteners? %s", choice.hasOnClickListeners());
                     choiceLayout.addView(choice, flowLP);
                 }
             }
@@ -136,8 +152,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode==INGREDIENT_REQUEST) {
             String[] chosenIngredients = data.getStringArrayExtra(EXTRA_INGREDIENTS);
-            //model.testData();
-            model.setChosenIngredients(Arrays.asList(chosenIngredients));
+            model.testData();
+            model.setChosenIngredients(new ArrayList<>(Arrays.asList(chosenIngredients)));
         }
     }
 }
