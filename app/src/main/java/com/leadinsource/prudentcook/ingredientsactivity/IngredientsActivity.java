@@ -1,5 +1,6 @@
 package com.leadinsource.prudentcook.ingredientsactivity;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
@@ -20,6 +21,7 @@ public class IngredientsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ingredients);
         //getActionBar().setDisplayHomeAsUpEnabled(true);
+
     }
 
     @Override

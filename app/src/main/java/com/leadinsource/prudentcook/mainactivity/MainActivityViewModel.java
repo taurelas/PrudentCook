@@ -13,8 +13,10 @@ import java.util.List;
 
 public class MainActivityViewModel extends ViewModel {
 
+    private final Repository repository;
+
     public MainActivityViewModel() {
-        new Repository();
+        repository = new Repository();
     }
 
     MutableLiveData<List<RVItem>> matches;

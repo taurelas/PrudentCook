@@ -1,6 +1,8 @@
 package com.leadinsource.prudentcook.ingredientsactivity;
 
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,6 +14,10 @@ import android.widget.AutoCompleteTextView;
 
 
 import com.leadinsource.prudentcook.R;
+import com.leadinsource.prudentcook.model.Ingredient;
+import com.leadinsource.prudentcook.model.IngredientImpl;
+
+import java.util.Set;
 
 import timber.log.Timber;
 
@@ -28,10 +34,12 @@ public class IngredientInputFragment extends Fragment {
     private static final String[] INGREDIENTS = new String[]{
             "Basil", "Black Pepper", "Cardamom", "Chicken", "Eggs", "Flour", "Salt", "Zucchini"
     };
+    private Set<Ingredient> ingredients;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private AutoCompleteTextView actv;
 
 
     public IngredientInputFragment() {
@@ -68,15 +76,45 @@ public class IngredientInputFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        if(getContext()==null) {
-            return null;
-        }
+
 
         Timber.d("Creating ingredients input");
         View rootView = inflater.inflate(R.layout.ingredients_input, container, false);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_dropdown_item_1line, INGREDIENTS);
-        AutoCompleteTextView actv = rootView.findViewById(R.id.autoCompleteTextView);
-        actv.setAdapter(adapter);
+        actv = rootView.findViewById(R.id.autoCompleteTextView);
+        ACTVSetup(INGREDIENTS);
         return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        IngredientsViewModel viewModel = ViewModelProviders.of(getActivity()).get(IngredientsViewModel.class);
+
+        viewModel.getIngredients().observe(this, new Observer<Set<Ingredient>>() {
+            @Override
+            public void onChanged(@Nullable Set<Ingredient> ingredients) {
+
+                IngredientInputFragment.this.ingredients = ingredients;
+
+                Ingredient[] ingredientArray = ingredients.toArray(new Ingredient[ingredients.size()]);
+
+                String[] array = new String[ingredients.size()];
+
+                for(int i=0;i<ingredients.size();i++) {
+                    array[i] = ingredientArray[i].getName();
+                }
+
+                ACTVSetup(array);
+            }
+        });
+    }
+
+    public void ACTVSetup(String[] ingredients) {
+        if (getContext() == null) {
+            return;
+        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_dropdown_item_1line, ingredients);
+        actv.setAdapter(adapter);
     }
 }

@@ -20,7 +20,7 @@ class RecipeDatabase {
     RepositoryCallback callback;
 
     interface RepositoryCallback {
-        void onRecipesChanged(HashMap<String, RecipeData> recipes);
+        void onRecipeAdded(HashMap<String, RecipeData> recipes);
     }
 
     RecipeDatabase(RepositoryCallback callback) {
@@ -43,7 +43,7 @@ class RecipeDatabase {
 
             recipes.put(dataSnapshot.getKey(), dataSnapshot.getValue(RecipeData.class));
 
-            callback.onRecipesChanged(recipes);
+            callback.onRecipeAdded(recipes);
         }
 
         @Override
