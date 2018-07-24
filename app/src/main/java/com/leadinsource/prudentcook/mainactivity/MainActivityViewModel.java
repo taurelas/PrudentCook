@@ -14,6 +14,7 @@ import java.util.List;
 public class MainActivityViewModel extends ViewModel {
 
     private final Repository repository;
+    private MutableLiveData<List<String>> chosenIngredients = new MutableLiveData<>();
 
     public MainActivityViewModel() {
         repository = new Repository();
@@ -38,5 +39,13 @@ public class MainActivityViewModel extends ViewModel {
         recipe = new Recipe("Spices", "salt, pepper, curry, THC, grated cheese", "Mix everything\nUnmix everything\nSeparate the spices");
         items.add(new RVItemImpl(recipe));
         matches.postValue(items);
+    }
+
+    public void setChosenIngredients(List<String> chosenIngredients) {
+        this.chosenIngredients.postValue(chosenIngredients);
+    }
+
+    public LiveData<List<String>> getChosenIngredients() {
+        return chosenIngredients;
     }
 }

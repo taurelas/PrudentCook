@@ -14,14 +14,18 @@ import android.widget.Toast;
 import com.leadinsource.prudentcook.R;
 import com.leadinsource.prudentcook.mainactivity.MainActivity;
 
+import java.util.List;
+
 public class IngredientsActivity extends AppCompatActivity {
+
+    private IngredientsViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ingredients);
         //getActionBar().setDisplayHomeAsUpEnabled(true);
-
+        viewModel = ViewModelProviders.of(this).get(IngredientsViewModel.class);
     }
 
     @Override
@@ -35,6 +39,11 @@ public class IngredientsActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intentWithIngredients = new Intent();
+
+        List<String> chosenIngredients = viewModel.getChosenIngredients().getValue();
+        if(chosenIngredients!=null) {
+            intentWithIngredients.putExtra(MainActivity.EXTRA_INGREDIENTS, chosenIngredients.toArray(new String[chosenIngredients.size()]));
+        }
 
         setResult(RESULT_OK, intentWithIngredients);
 
