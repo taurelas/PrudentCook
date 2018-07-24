@@ -6,7 +6,6 @@ import java.util.List;
 
 public class Recipe {
 
-    @SerializedName("label")
     public String name;
 
     public List<String> ingredientLines;

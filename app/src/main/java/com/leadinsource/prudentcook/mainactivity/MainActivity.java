@@ -10,16 +10,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.leadinsource.prudentcook.R;
-import com.leadinsource.prudentcook.data.Repository;
 import com.leadinsource.prudentcook.ingredientsactivity.IngredientsActivity;
 import com.leadinsource.prudentcook.recipeactivity.RecipeActivity;
 
@@ -27,20 +24,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.leadinsource.prudentcook.model.RVItemImpl;
-import com.leadinsource.prudentcook.model.Recipe;
-
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements RecyclerViewAdapter.OnClickListener {
 
     public static final int INGREDIENT_REQUEST = 528;
+    public static final String EXTRA_RECIPE_NAME = "EXTRA_RECIPE_NAME";
+    public static final String EXTRA_STEPS = "EXTRA_STEPS";
+    public static final String EXTRA_INGREDIENTS = "EXTRA_INGREDIENTS";
     private FirebaseAnalytics firebaseAnalytics;
     private FlowLayout choiceLayout;
-    private int counter = 0;
     private RecyclerView recyclerView;
     private MainActivityViewModel model;
-    public static final String EXTRA_INGREDIENTS = "EXTRA_INGREDIENTS";
+
     private FlowLayout.LayoutParams flowLP;
 
     @Override
@@ -145,11 +141,16 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     public void onClick(RVItem item) {
         Toast.makeText(this, "Clicked "+item.getRecipeName(), Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(MainActivity.this, RecipeActivity.class);
+        intent.putExtra(EXTRA_RECIPE_NAME, item.getRecipeName());
+        intent.putExtra(EXTRA_INGREDIENTS, item.getMissingIngredients());
+        intent.putExtra(EXTRA_STEPS, item.getRecipeExcerpt());
         startActivity(intent);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(data==null) return;
+
         if(requestCode==INGREDIENT_REQUEST) {
             String[] chosenIngredients = data.getStringArrayExtra(EXTRA_INGREDIENTS);
             model.testData();
