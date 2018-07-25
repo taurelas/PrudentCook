@@ -31,9 +31,14 @@ public class RecipeActivity extends AppCompatActivity {
         String ingredients = intent.getStringExtra(MainActivity.EXTRA_INGREDIENTS);
         String steps = intent.getStringExtra(MainActivity.EXTRA_STEPS);
 
-        TextView recipe = findViewById(R.id.tvRecipeText);
+        setTitle(recipeName);
 
-        recipe.setText(recipeName + "\n"+ingredients+"\n"+steps);
+        TextView tvIngredients = findViewById(R.id.tvIngredients);
+
+        TextView tvSteps = findViewById(R.id.tvSteps);
+
+        tvIngredients.setText(ingredients);
+        tvSteps.setText(steps);
 
 
         MobileAds.initialize(this, "ca-app-pub-1785118724408316~9524578956");

@@ -34,9 +34,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/tvRecipeText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        <include android:layout_height="wrap_content" android:layout_width="match_parent" layout="@layout/content_recipe" />
     </ScrollView>
 </android.support.constraint.ConstraintLayout>
