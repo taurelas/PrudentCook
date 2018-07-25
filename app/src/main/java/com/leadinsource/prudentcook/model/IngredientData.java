@@ -1,6 +1,10 @@
 package com.leadinsource.prudentcook.model;
 
 public class IngredientData {
+    private String unit;
+    private long amount;
+    private boolean required;
+
     public String getUnit() {
         return unit;
     }
@@ -24,8 +28,4 @@ public class IngredientData {
     public void setRequired(boolean required) {
         this.required = required;
     }
-
-    private String unit;
-    private long amount;
-    private boolean required;
 }
