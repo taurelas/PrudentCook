@@ -6,12 +6,7 @@ import com.leadinsource.prudentcook.model.Recipe;
 public class RVItemImpl implements RVItem{
 
     private RecipeData recipeData;
-    Recipe recipe;
-    String recipeName;
-
-    public RVItemImpl(Recipe recipe) {
-        this.recipe = recipe;
-    }
+    private String recipeName;
 
     public RVItemImpl(String recipeName, RecipeData recipeData) {
         this.recipeName = recipeName;
@@ -20,16 +15,28 @@ public class RVItemImpl implements RVItem{
 
     @Override
     public String getRecipeName() {
-        return recipe.getName();
+        return recipeName;
     }
 
     @Override
     public String getMissingIngredients() {
-        return recipe.getIngredients();
+        if(recipeData==null) return "";
+        if(recipeData.getIngredients()==null) return "";
+        if(recipeData.getIngredients().keySet().isEmpty()) return "";
+
+        StringBuilder sb = new StringBuilder();
+
+        for(String ingredient : recipeData.getIngredients().keySet()) {
+            sb.append(ingredient).append(" ");
+        }
+
+        return sb.toString();
     }
 
     @Override
     public String getRecipeExcerpt() {
-        return recipe.getSteps();
+        if(recipeData==null) return "";
+
+        return recipeData.getSteps();
     }
 }

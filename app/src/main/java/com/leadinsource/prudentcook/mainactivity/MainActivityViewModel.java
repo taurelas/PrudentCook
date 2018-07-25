@@ -1,8 +1,11 @@
 package com.leadinsource.prudentcook.mainactivity;
 
+import android.arch.core.util.Function;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
+import android.text.util.Linkify;
 
 import com.leadinsource.prudentcook.data.Repository;
 import com.leadinsource.prudentcook.model.RVItemImpl;
@@ -16,22 +19,22 @@ public class MainActivityViewModel extends ViewModel {
 
     private final Repository repository;
     private MutableLiveData<ArrayList<String>> chosenIngredients = new MutableLiveData<>();
-
+    private LiveData<List<RVItem>> matches;
     public MainActivityViewModel() {
         repository = new Repository();
+        matches = Transformations.switchMap(chosenIngredients, new Function<ArrayList<String>, LiveData<List<RVItem>>>() {
+            @Override
+            public LiveData<List<RVItem>> apply(ArrayList<String> input) {
+                return repository.getMatches(input);
+            }
+        });
     }
 
-    MutableLiveData<List<RVItem>> matches;
-
     LiveData<List<RVItem>> getMatches() {
-        if(matches==null) {
-            matches = new MutableLiveData<>();
-        }
-
         return matches;
     }
 
-    public void testData() {
+    /*public void testData() {
         List<RVItem> items = new ArrayList<>();
         Recipe recipe = new Recipe("Spaghetti", "pasta, sauce", "Cook spaghetti, cook everything");
         items.add(new RVItemImpl(recipe));
@@ -40,7 +43,7 @@ public class MainActivityViewModel extends ViewModel {
         recipe = new Recipe("Spices", "salt, pepper, curry, THC, grated cheese", "Mix everything\nUnmix everything\nSeparate the spices");
         items.add(new RVItemImpl(recipe));
         matches.postValue(items);
-    }
+    }*/
 
     public void setChosenIngredients(ArrayList<String> chosenIngredients) {
         this.chosenIngredients.postValue(chosenIngredients);

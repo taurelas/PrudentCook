@@ -55,7 +55,9 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         model.getMatches().observe(this, new Observer<List<RVItem>>() {
             @Override
             public void onChanged(@Nullable List<RVItem> items) {
-                recyclerView.setAdapter(new RecyclerViewAdapter(items, MainActivity.this));
+                if (items!=null) {
+                    recyclerView.setAdapter(new RecyclerViewAdapter(items, MainActivity.this));
+                }
             }
         });
 
@@ -153,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
 
         if(requestCode==INGREDIENT_REQUEST) {
             String[] chosenIngredients = data.getStringArrayExtra(EXTRA_INGREDIENTS);
-            model.testData();
+            //model.testData();
             model.setChosenIngredients(new ArrayList<>(Arrays.asList(chosenIngredients)));
         }
     }

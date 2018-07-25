@@ -1,5 +1,6 @@
 package com.leadinsource.prudentcook.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -29,12 +30,27 @@ public class RecipeData {
 
     public Set<Ingredient> getIngredientsSet() {
         Set<Ingredient> result = new HashSet<>();
-        Timber.d("Processing start");
-        for(String key : ingredients.keySet()) {
-            Timber.d("Processing: %s", key);
+        for (String key : ingredients.keySet()) {
             result.add(new IngredientImpl(key, ingredients.get(key)));
         }
 
         return result;
+    }
+
+    public boolean matches(ArrayList<String> ingredientList) {
+        if (ingredients == null) return false;
+        if (ingredientList == null) return false;
+
+        //if (ingredientList.size() < ingredients.size()) return false;
+
+        for (String name : ingredients.keySet()) {
+            if (ingredients.get(name).isRequired()) {
+                if (!ingredientList.contains(name)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 }
