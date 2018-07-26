@@ -46,4 +46,8 @@ public class FavoriteManager {
     public static Map<String, ?> getFavorites(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getAll();
     }
+
+    public static String getIngredients(Context context, String recipeName) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(recipeName, "");
+    }
 }
