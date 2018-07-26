@@ -7,7 +7,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
+
+import com.leadinsource.prudentcook.data.FavoriteManager;
+
+import java.util.Map;
+import java.util.Set;
 
 /**
  * The configuration screen for the {@link RecipeWidget RecipeWidget} AppWidget.
@@ -38,6 +46,8 @@ public class RecipeWidgetConfigureActivity extends Activity {
             finish();
         }
     };
+    private String[] favoritesArray;
+    private Map<String, ?> ingredients;
 
     public RecipeWidgetConfigureActivity() {
         super();
@@ -78,6 +88,44 @@ public class RecipeWidgetConfigureActivity extends Activity {
 
         setContentView(R.layout.recipe_widget_configure);
         mAppWidgetText = findViewById(R.id.appwidget_text);
+
+        ListView listView = findViewById(R.id.listView);
+
+        ingredients = FavoriteManager.getFavorites(this);
+
+        Set<String> favorites = FavoriteManager.getFavorites(this).keySet();
+
+        favoritesArray = favorites.toArray(new String[favorites.size()]);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1, favoritesArray);
+
+        listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final Context context = RecipeWidgetConfigureActivity.this;
+
+                // When the button is clicked, store the string locally
+                String recipeName = favoritesArray[position];
+                String ingredientString = (String) ingredients.get(recipeName);
+
+                String widgetText = recipeName + "\n" + ingredientString;
+                saveTitlePref(context, mAppWidgetId, widgetText);
+
+                // It is the responsibility of the configuration activity to update the app widget
+                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+                RecipeWidget.updateAppWidget(context, appWidgetManager, mAppWidgetId);
+
+                // Make sure we pass back the original appWidgetId
+                Intent resultValue = new Intent();
+                resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+                setResult(RESULT_OK, resultValue);
+                finish();
+            }
+        });
+
         findViewById(R.id.add_button).setOnClickListener(mOnClickListener);
 
         // Find the widget id from the intent.

@@ -30,7 +30,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.leadinsource.prudentcook.mainactivity.MainActivity" />
         </activity>
-        <activity android:name=".recipeactivity.RecipeActivity" />
+        <activity android:name=".recipeactivity.RecipeActivity" android:theme="@style/AppTheme.NoActionBar" />
 
         <receiver android:name=".RecipeWidget">
             <intent-filter>

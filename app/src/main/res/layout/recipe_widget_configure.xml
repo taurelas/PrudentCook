@@ -9,8 +9,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="@string/configure" />
+        android:text="@string/choose_a_favorite_recipe_for_the_widget" />
+<ListView
+    android:id="@+id/listView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
+</ListView>
     <EditText
         android:id="@+id/appwidget_text"
         android:layout_width="match_parent"
