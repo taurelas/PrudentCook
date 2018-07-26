@@ -1,7 +1,10 @@
 package com.leadinsource.prudentcook.recipeactivity;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +18,7 @@ import com.leadinsource.prudentcook.R;
 import com.leadinsource.prudentcook.data.FavoriteManager;
 import com.leadinsource.prudentcook.data.Repository;
 import com.leadinsource.prudentcook.mainactivity.MainActivity;
+import com.leadinsource.prudentcook.model.RecipeData;
 
 import timber.log.Timber;
 
@@ -31,12 +35,18 @@ public class RecipeActivity extends AppCompatActivity {
 
     public static final String EXTRA_RECIPE_NAME = "EXTRA_RECIPE_NAME";
     public static final String EXTRA_INGREDIENTS = "EXTRA_INGREDIENTS";
+    private TextView tvIngredients;
+    private TextView tvSteps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
-
+        Timber.d("SetcontentView 528491");
+        RecipeViewModel viewModel = ViewModelProviders.of(this).get(RecipeViewModel.class);
+        Timber.d("Got with the model 528491");
+        tvIngredients = findViewById(R.id.tvIngredients);
+        tvSteps = findViewById(R.id.tvSteps);
         Intent intent = getIntent();
 
         if(intent==null) {
@@ -44,30 +54,32 @@ public class RecipeActivity extends AppCompatActivity {
             return;
         }
 
+        viewModel.getRecipeData().observe(this, new Observer<RecipeData>() {
+            @Override
+            public void onChanged(@Nullable RecipeData recipeData) {
+                if(recipeData!=null) {
+                    ingredients = recipeData.getIngredientsString();
+                    tvIngredients.setText(ingredients);
+                    tvSteps.setText(recipeData.getSteps());
+                }
+            }
+        });
+
         if(intent.getAction()!=null && intent.getAction().equals("WIDGET_DATA")) {
             recipeName = intent.getStringExtra(EXTRA_RECIPE_NAME);
+            viewModel.setRecipe(recipeName);
+        //    ingredients = intent.getStringExtra(EXTRA_INGREDIENTS);
 
-            ingredients = intent.getStringExtra(EXTRA_INGREDIENTS);
-
-            Timber.d("Got: %s / %s", recipeName, ingredients);
+//            Timber.d("Got: %s / %s", recipeName, ingredients);
         } else {
 
             recipeName = intent.getStringExtra(EXTRA_RECIPE_NAME);
 
-            ingredients = intent.getStringExtra(EXTRA_INGREDIENTS);
-
-            Timber.d("Got: %s / %s", recipeName, ingredients);
-
-            String steps = intent.getStringExtra(MainActivity.EXTRA_STEPS);
-            TextView tvSteps = findViewById(R.id.tvSteps);
-            tvSteps.setText(steps);
+            viewModel.setRecipe(recipeName);
 
         }
+        Timber.d("Setting title 528491");
         setTitle(recipeName);
-
-        TextView tvIngredients = findViewById(R.id.tvIngredients);
-
-        tvIngredients.setText(ingredients);
 
         fab = findViewById(R.id.fab);
 
@@ -88,12 +100,15 @@ public class RecipeActivity extends AppCompatActivity {
                 adView.loadAd(adRequest);
             }
         }.execute();
+        Timber.d("onCreate complete 528491");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        Timber.d("onResume in the midst 528491");
         updateFabButton();
+        Timber.d("onResume completed 528491");
 
     }
 
@@ -103,11 +118,12 @@ public class RecipeActivity extends AppCompatActivity {
     }
 
     private void updateFabButton() {
-
+        Timber.d("updateFabButton 528491");
         if(FavoriteManager.isFavorite(this, recipeName)) {
             fab.setImageResource(R.drawable.ic_favorite_white_24dp);
         } else {
             fab.setImageResource(R.drawable.ic_favorite_border_white_24dp);
         }
+        Timber.d("updateFabButton finished 528491" );
     }
 }

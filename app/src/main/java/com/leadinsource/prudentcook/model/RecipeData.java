@@ -53,4 +53,17 @@ public class RecipeData {
 
         return true;
     }
+
+    public String getIngredientsString() {
+        if(ingredients==null) return "";
+        if(ingredients.keySet().isEmpty()) return "";
+
+        StringBuilder sb = new StringBuilder();
+
+        for(String ingredient : ingredients.keySet()) {
+            sb.append(ingredient).append(" ");
+        }
+
+        return sb.toString();
+    }
 }

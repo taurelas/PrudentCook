@@ -17,7 +17,7 @@ import timber.log.Timber;
 class RecipeDatabase {
 
     private HashMap<String, RecipeData> recipes;
-    RepositoryCallback callback;
+    private RepositoryCallback callback;
 
     interface RepositoryCallback {
         void onRecipeAdded(HashMap<String, RecipeData> recipes);
@@ -34,9 +34,6 @@ class RecipeDatabase {
     private ChildEventListener childEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            Timber.d("got these: %s : %s", dataSnapshot.getKey(), dataSnapshot.getValue());
-
             if (recipes == null) {
                 recipes = new HashMap<>();
             }
