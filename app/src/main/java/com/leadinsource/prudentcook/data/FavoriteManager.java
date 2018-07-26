@@ -1,4 +1,4 @@
-package com.leadinsource.prudentcook.recipeactivity;
+package com.leadinsource.prudentcook.data;
 
 import android.content.Context;
 import android.content.SharedPreferences;

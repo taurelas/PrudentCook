@@ -12,6 +12,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.leadinsource.prudentcook.R;
+import com.leadinsource.prudentcook.data.FavoriteManager;
 import com.leadinsource.prudentcook.mainactivity.MainActivity;
 
 /**

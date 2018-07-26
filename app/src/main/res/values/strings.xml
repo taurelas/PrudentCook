@@ -15,4 +15,5 @@
     <string name="ingredients">Ingredients</string>
     <string name="steps">Steps</string>
     <string name="food">Food</string>
+    <string name="choose_a_favorite_recipe_for_the_widget">Choose a favorite recipe for the widget</string>
 </resources>
