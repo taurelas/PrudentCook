@@ -1,17 +1,28 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/widgetLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    style="@style/RecipeWidget"
+    android:clickable="true"
+    android:focusable="true">
 
     <TextView
-        android:id="@+id/appwidget_text"
+        android:id="@+id/tvWidgetRecipeName"
+        style="@style/RecipeWidget"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:background="@android:color/background_dark"
-        android:contentDescription="@string/appwidget_text"
-        android:text="@string/appwidget_text"
-        android:textColor="#ffffff"
-       />
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        tools:text="Spaghetti Bolognese" />
 
+    <TextView
+        android:id="@+id/tvWidgetIngredients"
+        style="@style/RecipeWidget"
+        tools:text="water salt basil spaghetti mince"
+        android:layout_margin="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

@@ -16,6 +16,8 @@ import com.leadinsource.prudentcook.mainactivity.MainActivity;
 
 import java.util.List;
 
+import static com.leadinsource.prudentcook.mainactivity.MainActivity.EXTRA_CHOSEN_INGREDIENTS;
+
 public class IngredientsActivity extends AppCompatActivity {
 
     private IngredientsViewModel viewModel;
@@ -42,7 +44,7 @@ public class IngredientsActivity extends AppCompatActivity {
 
         List<String> chosenIngredients = viewModel.getChosenIngredients().getValue();
         if(chosenIngredients!=null) {
-            intentWithIngredients.putExtra(MainActivity.EXTRA_INGREDIENTS, chosenIngredients.toArray(new String[chosenIngredients.size()]));
+            intentWithIngredients.putExtra(EXTRA_CHOSEN_INGREDIENTS, chosenIngredients.toArray(new String[chosenIngredients.size()]));
         }
 
         setResult(RESULT_OK, intentWithIngredients);

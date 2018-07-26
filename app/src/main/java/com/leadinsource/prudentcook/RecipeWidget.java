@@ -7,9 +7,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
 
-import com.leadinsource.prudentcook.mainactivity.MainActivity;
-import com.leadinsource.prudentcook.model.Recipe;
+import com.leadinsource.prudentcook.data.FavoriteManager;
 import com.leadinsource.prudentcook.recipeactivity.RecipeActivity;
+
+import timber.log.Timber;
+
+import static com.leadinsource.prudentcook.recipeactivity.RecipeActivity.EXTRA_INGREDIENTS;
+import static com.leadinsource.prudentcook.recipeactivity.RecipeActivity.EXTRA_RECIPE_NAME;
 
 /**
  * Implementation of App Widget functionality.
@@ -19,15 +23,19 @@ public class RecipeWidget extends AppWidgetProvider {
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
-
-        CharSequence widgetText = RecipeWidgetConfigureActivity.loadTitlePref(context, appWidgetId);
+        CharSequence recipeName = RecipeWidgetConfigureActivity.loadTitlePref(context, appWidgetId);
+        String ingredients = FavoriteManager.getIngredients(context, recipeName.toString());
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget);
-        views.setTextViewText(R.id.appwidget_text, widgetText);
+        views.setTextViewText(R.id.tvWidgetRecipeName, recipeName);
+        views.setTextViewText(R.id.tvWidgetIngredients, ingredients);
         Intent intent = new Intent(context, RecipeActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        //TODO add recipe data to the bundle so the recipeActivity has it
-        views.setOnClickPendingIntent(views.getLayoutId(), pendingIntent);
+        intent.putExtra(EXTRA_RECIPE_NAME, recipeName);
+        intent.putExtra(EXTRA_INGREDIENTS, ingredients);
+        intent.setAction("WIDGET_DATA");
+        Timber.d("check Intent: %s / %s", intent.getStringExtra(EXTRA_RECIPE_NAME),intent.getStringExtra(EXTRA_INGREDIENTS));
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+        views.setOnClickPendingIntent(R.id.tvWidgetIngredients, pendingIntent);
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }

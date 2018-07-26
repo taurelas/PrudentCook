@@ -26,12 +26,16 @@ import java.util.List;
 
 import timber.log.Timber;
 
+import static com.leadinsource.prudentcook.recipeactivity.RecipeActivity.EXTRA_INGREDIENTS;
+import static com.leadinsource.prudentcook.recipeactivity.RecipeActivity.EXTRA_RECIPE_NAME;
+
 public class MainActivity extends AppCompatActivity implements RecyclerViewAdapter.OnClickListener {
 
     public static final int INGREDIENT_REQUEST = 528;
-    public static final String EXTRA_RECIPE_NAME = "EXTRA_RECIPE_NAME";
+
     public static final String EXTRA_STEPS = "EXTRA_STEPS";
-    public static final String EXTRA_INGREDIENTS = "EXTRA_INGREDIENTS";
+    public static final String EXTRA_CHOSEN_INGREDIENTS = "EXTRA_CHOSEN_INGREDIENTS";
+
     private FirebaseAnalytics firebaseAnalytics;
     private FlowLayout choiceLayout;
     private RecyclerView recyclerView;
@@ -154,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         if(data==null) return;
 
         if(requestCode==INGREDIENT_REQUEST) {
-            String[] chosenIngredients = data.getStringArrayExtra(EXTRA_INGREDIENTS);
+            String[] chosenIngredients = data.getStringArrayExtra(EXTRA_CHOSEN_INGREDIENTS);
             //model.testData();
             model.setChosenIngredients(new ArrayList<>(Arrays.asList(chosenIngredients)));
         }

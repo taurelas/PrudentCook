@@ -17,4 +17,9 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="RecipeWidget" >
+        <item name="android:background">@color/primary_dark</item>
+        <item name="android:textColor">@color/background</item>
+    </style>
+
 </resources>

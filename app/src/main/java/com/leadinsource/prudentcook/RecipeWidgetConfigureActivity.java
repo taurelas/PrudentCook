@@ -14,40 +14,17 @@ import android.widget.ListView;
 
 import com.leadinsource.prudentcook.data.FavoriteManager;
 
-import java.util.Map;
 import java.util.Set;
 
 /**
  * The configuration screen for the {@link RecipeWidget RecipeWidget} AppWidget.
  */
 public class RecipeWidgetConfigureActivity extends Activity {
-    // TODO update this to read from SharedPreferences into a ListView that can be clicked and
-    // the recipe data passed to the widget
     private static final String PREFS_NAME = "com.leadinsource.prudentcook.RecipeWidget";
     private static final String PREF_PREFIX_KEY = "appwidget_";
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
-    EditText mAppWidgetText;
-    View.OnClickListener mOnClickListener = new View.OnClickListener() {
-        public void onClick(View v) {
-            final Context context = RecipeWidgetConfigureActivity.this;
 
-            // When the button is clicked, store the string locally
-            String widgetText = mAppWidgetText.getText().toString();
-            saveTitlePref(context, mAppWidgetId, widgetText);
-
-            // It is the responsibility of the configuration activity to update the app widget
-            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-            RecipeWidget.updateAppWidget(context, appWidgetManager, mAppWidgetId);
-
-            // Make sure we pass back the original appWidgetId
-            Intent resultValue = new Intent();
-            resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
-            setResult(RESULT_OK, resultValue);
-            finish();
-        }
-    };
     private String[] favoritesArray;
-    private Map<String, ?> ingredients;
 
     public RecipeWidgetConfigureActivity() {
         super();
@@ -87,11 +64,8 @@ public class RecipeWidgetConfigureActivity extends Activity {
         setResult(RESULT_CANCELED);
 
         setContentView(R.layout.recipe_widget_configure);
-        mAppWidgetText = findViewById(R.id.appwidget_text);
 
         ListView listView = findViewById(R.id.listView);
-
-        ingredients = FavoriteManager.getFavorites(this);
 
         Set<String> favorites = FavoriteManager.getFavorites(this).keySet();
 
@@ -108,10 +82,8 @@ public class RecipeWidgetConfigureActivity extends Activity {
                 final Context context = RecipeWidgetConfigureActivity.this;
 
                 // When the button is clicked, store the string locally
-                String recipeName = favoritesArray[position];
-                String ingredientString = (String) ingredients.get(recipeName);
 
-                String widgetText = recipeName + "\n" + ingredientString;
+                String widgetText = favoritesArray[position];
                 saveTitlePref(context, mAppWidgetId, widgetText);
 
                 // It is the responsibility of the configuration activity to update the app widget
@@ -126,7 +98,7 @@ public class RecipeWidgetConfigureActivity extends Activity {
             }
         });
 
-        findViewById(R.id.add_button).setOnClickListener(mOnClickListener);
+
 
         // Find the widget id from the intent.
         Intent intent = getIntent();
@@ -142,7 +114,6 @@ public class RecipeWidgetConfigureActivity extends Activity {
             return;
         }
 
-        mAppWidgetText.setText(loadTitlePref(RecipeWidgetConfigureActivity.this, mAppWidgetId));
     }
 }
 

@@ -13,7 +13,10 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.leadinsource.prudentcook.R;
 import com.leadinsource.prudentcook.data.FavoriteManager;
+import com.leadinsource.prudentcook.data.Repository;
 import com.leadinsource.prudentcook.mainactivity.MainActivity;
+
+import timber.log.Timber;
 
 /**
  * App photos unless otherwise stated are CC0 licensed (no attribution required)
@@ -25,6 +28,9 @@ public class RecipeActivity extends AppCompatActivity {
     private String recipeName;
     private String ingredients;
     private FloatingActionButton fab;
+
+    public static final String EXTRA_RECIPE_NAME = "EXTRA_RECIPE_NAME";
+    public static final String EXTRA_INGREDIENTS = "EXTRA_INGREDIENTS";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,18 +44,31 @@ public class RecipeActivity extends AppCompatActivity {
             return;
         }
 
-        recipeName = intent.getStringExtra(MainActivity.EXTRA_RECIPE_NAME);
-        ingredients = intent.getStringExtra(MainActivity.EXTRA_INGREDIENTS);
-        String steps = intent.getStringExtra(MainActivity.EXTRA_STEPS);
+        if(intent.getAction()!=null && intent.getAction().equals("WIDGET_DATA")) {
+            recipeName = intent.getStringExtra(EXTRA_RECIPE_NAME);
 
+            ingredients = intent.getStringExtra(EXTRA_INGREDIENTS);
+
+            Timber.d("Got: %s / %s", recipeName, ingredients);
+        } else {
+
+            recipeName = intent.getStringExtra(EXTRA_RECIPE_NAME);
+
+            ingredients = intent.getStringExtra(EXTRA_INGREDIENTS);
+
+            Timber.d("Got: %s / %s", recipeName, ingredients);
+
+            String steps = intent.getStringExtra(MainActivity.EXTRA_STEPS);
+            TextView tvSteps = findViewById(R.id.tvSteps);
+            tvSteps.setText(steps);
+
+        }
         setTitle(recipeName);
 
         TextView tvIngredients = findViewById(R.id.tvIngredients);
 
-        TextView tvSteps = findViewById(R.id.tvSteps);
-
         tvIngredients.setText(ingredients);
-        tvSteps.setText(steps);
+
         fab = findViewById(R.id.fab);
 
         new AsyncTask<Void, Void, Void>() {
