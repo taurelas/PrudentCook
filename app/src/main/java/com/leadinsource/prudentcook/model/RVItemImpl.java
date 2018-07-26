@@ -21,16 +21,8 @@ public class RVItemImpl implements RVItem{
     @Override
     public String getMissingIngredients() {
         if(recipeData==null) return "";
-        if(recipeData.getIngredients()==null) return "";
-        if(recipeData.getIngredients().keySet().isEmpty()) return "";
 
-        StringBuilder sb = new StringBuilder();
-
-        for(String ingredient : recipeData.getIngredients().keySet()) {
-            sb.append(ingredient).append(" ");
-        }
-
-        return sb.toString();
+        return recipeData.getIngredientsString();
     }
 
     @Override

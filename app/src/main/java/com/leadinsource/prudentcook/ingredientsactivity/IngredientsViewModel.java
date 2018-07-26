@@ -23,7 +23,7 @@ public class IngredientsViewModel extends ViewModel {
     private MutableLiveData<List<String>> chosenIngredients = new MutableLiveData<>();
 
     public IngredientsViewModel() {
-        repository = new Repository();
+        repository = Repository.getInstance();
 
         availableIngredients.addSource(repository.getIngredients(), new Observer<Set<Ingredient>>() {
             @Override

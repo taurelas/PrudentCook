@@ -1,7 +1,10 @@
 package com.leadinsource.prudentcook.data;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Observer;
+import android.support.annotation.Nullable;
 
 import com.leadinsource.prudentcook.mainactivity.RVItem;
 import com.leadinsource.prudentcook.model.Ingredient;
@@ -16,12 +19,43 @@ import java.util.Set;
 
 public class Repository implements RecipeDatabase.RepositoryCallback {
 
-    private MutableLiveData<HashMap<String, RecipeData>> recipes;
+    private MutableLiveData<HashMap<String, RecipeData>> recipes = new MutableLiveData<>();
     private MutableLiveData<Set<Ingredient>> ingredients = new MutableLiveData<>();
     private MutableLiveData<List<RVItem>> matches = new MutableLiveData<>();
+    private MediatorLiveData<RecipeData> recipeDataLiveData = new MediatorLiveData<>();
+    private MutableLiveData<String> recipeName = new MutableLiveData<>();
 
-    public Repository() {
+    private static Repository instance;
+
+
+    public static Repository getInstance() {
+        if(instance==null) {
+            instance = new Repository();
+        }
+
+        return instance;
+    }
+
+
+    private Repository() {
         new RecipeDatabase(this);
+        recipeDataLiveData.addSource(recipeName, new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String recipe) {
+                if(recipe==null || recipes == null || recipes.getValue()==null) return;
+
+                recipeDataLiveData.postValue(recipes.getValue().get(recipe));
+            }
+        });
+        recipeDataLiveData.addSource(recipes, new Observer<HashMap<String, RecipeData>>() {
+            @Override
+            public void onChanged(@Nullable HashMap<String, RecipeData> stringRecipeDataHashMap) {
+                if(recipeName==null || recipeName.getValue()==null || stringRecipeDataHashMap==null || stringRecipeDataHashMap.get(recipeName.getValue())==null)
+                    return;
+
+                recipeDataLiveData.postValue(stringRecipeDataHashMap.get(recipeName.getValue()));
+            }
+        });
     }
 
     @Override
@@ -64,5 +98,12 @@ public class Repository implements RecipeDatabase.RepositoryCallback {
         matches.setValue(result);
 
         return matches;
+    }
+
+    public LiveData<RecipeData> getData(String input) {
+        recipeDataLiveData.setValue(recipes.getValue().get(input));
+        recipeName.postValue(input);
+
+        return recipeDataLiveData;
     }
 }
