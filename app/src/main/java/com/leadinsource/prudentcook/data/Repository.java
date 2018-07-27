@@ -1,9 +1,11 @@
 package com.leadinsource.prudentcook.data;
 
+import android.arch.core.util.Function;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.Transformations;
 import android.support.annotation.Nullable;
 
 import com.leadinsource.prudentcook.mainactivity.RVItem;
@@ -23,9 +25,10 @@ public class Repository implements RecipeDatabase.RepositoryCallback {
 
     private MutableLiveData<HashMap<String, RecipeData>> recipes = new MutableLiveData<>();
     private MutableLiveData<Set<Ingredient>> ingredients = new MutableLiveData<>();
-    private MutableLiveData<List<RVItem>> matches = new MutableLiveData<>();
+    private MediatorLiveData<List<RVItem>> matches = new MediatorLiveData<>();
     private MediatorLiveData<RecipeData> recipeDataLiveData = new MediatorLiveData<>();
     private MutableLiveData<String> recipeName = new MutableLiveData<>();
+    private MutableLiveData<ArrayList<String>> searchTerms = new MutableLiveData<>();
 
     private static Repository instance;
 
@@ -58,6 +61,44 @@ public class Repository implements RecipeDatabase.RepositoryCallback {
                 recipeDataLiveData.postValue(stringRecipeDataHashMap.get(recipeName.getValue()));
             }
         });
+
+
+        matches.addSource(searchTerms, new Observer<ArrayList<String>>() {
+            @Override
+            public void onChanged(@Nullable ArrayList<String> input) {
+                List<RVItem> result = new ArrayList<>();
+                if (recipes.getValue()!=null && input != null) {
+                    HashMap<String, RecipeData> recipesMap = new HashMap<>(recipes.getValue());
+
+                    for(String recipeName : recipesMap.keySet()) {
+                        RecipeData recipeData = recipesMap.get(recipeName);
+                        if(recipeData.matches(input)) {
+                            result.add(new RVItemImpl(recipeName, recipeData));
+                        }
+                    }
+                }
+
+                matches.postValue(result);
+            }
+        });
+
+        matches.addSource(recipes, new Observer<HashMap<String, RecipeData>>() {
+            @Override
+            public void onChanged(@Nullable HashMap<String, RecipeData> recipesMap) {
+                List<RVItem> result = new ArrayList<>();
+                if (recipes.getValue()!=null && searchTerms.getValue() != null) {
+
+                    for(String recipeName : recipesMap.keySet()) {
+                        RecipeData recipeData = recipesMap.get(recipeName);
+                        if(recipeData.matches(searchTerms.getValue())) {
+                            result.add(new RVItemImpl(recipeName, recipeData));
+                        }
+                    }
+                }
+
+                matches.postValue(result);
+            }
+        });
     }
 
     @Override
@@ -85,18 +126,7 @@ public class Repository implements RecipeDatabase.RepositoryCallback {
 
     public LiveData<List<RVItem>> getMatches(ArrayList<String> input) {
 
-        List<RVItem> result = new ArrayList<>();
-
-        HashMap<String, RecipeData> recipesMap = new HashMap<>(recipes.getValue());
-
-        for(String recipeName : recipesMap.keySet()) {
-            RecipeData recipeData = recipesMap.get(recipeName);
-            if(recipeData.matches(input)) {
-                result.add(new RVItemImpl(recipeName, recipeData));
-            }
-        }
-
-        matches.setValue(result);
+        searchTerms.postValue(input);
 
         return matches;
     }

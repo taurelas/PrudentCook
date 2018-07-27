@@ -5,6 +5,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
+import android.os.Bundle;
 
 import com.leadinsource.prudentcook.data.Repository;
 
@@ -13,6 +14,7 @@ import java.util.List;
 
 public class MainActivityViewModel extends ViewModel {
 
+    private static final String INGREDIENTS = "INGREDIENTS";
     private final Repository repository;
     private MutableLiveData<ArrayList<String>> chosenIngredients = new MutableLiveData<>();
     private LiveData<List<RVItem>> matches;
@@ -46,5 +48,13 @@ public class MainActivityViewModel extends ViewModel {
         list.remove(ingredientName);
 
         chosenIngredients.postValue(list);
+    }
+
+    public void restoreState(Bundle savedInstanceState) {
+        chosenIngredients.postValue(savedInstanceState.getStringArrayList(INGREDIENTS));
+    }
+
+    public void saveState(Bundle outState) {
+        outState.putStringArrayList(INGREDIENTS, chosenIngredients.getValue());
     }
 }
