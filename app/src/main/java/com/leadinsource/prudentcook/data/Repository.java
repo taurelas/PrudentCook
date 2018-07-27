@@ -17,8 +17,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import timber.log.Timber;
-
 public class Repository implements RecipeDatabase.RepositoryCallback {
 
     private MutableLiveData<HashMap<String, RecipeData>> recipes = new MutableLiveData<>();
@@ -62,7 +60,6 @@ public class Repository implements RecipeDatabase.RepositoryCallback {
 
     @Override
     public void onRecipeAdded(HashMap<String, RecipeData> recipes) {
-        Timber.d("Recipe added 528491");
         if (this.recipes == null) {
             this.recipes = new MutableLiveData<>();
         }
