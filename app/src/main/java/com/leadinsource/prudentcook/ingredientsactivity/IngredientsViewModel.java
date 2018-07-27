@@ -16,20 +16,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import timber.log.Timber;
+
 public class IngredientsViewModel extends ViewModel {
 
     private final Repository repository;
     private MediatorLiveData<List<String>> availableIngredients = new MediatorLiveData<>();
     private MutableLiveData<List<String>> chosenIngredients = new MutableLiveData<>();
+    private MutableLiveData<Boolean> addingComplete = new MutableLiveData<>();
 
     public IngredientsViewModel() {
         repository = Repository.getInstance();
-
+        addingComplete.postValue(false);
         availableIngredients.addSource(repository.getIngredients(), new Observer<Set<Ingredient>>() {
             @Override
             public void onChanged(@Nullable Set<Ingredient> ingredients) {
-                if(ingredients==null) return;
-
+                if(ingredients==null) {
+                    Timber.d("No ingredients in the database 528491");
+                    return;
+                }
+                Timber.d("Ingredients exist in the database 528491");
                 // converting to a list of strings, we only need this for the activity
                 List<String> ingredientsStringList = new ArrayList<>();
                 for(Ingredient ingredient : ingredients) {
@@ -85,5 +91,13 @@ public class IngredientsViewModel extends ViewModel {
 
     public LiveData<List<String>> getChosenIngredients() {
         return chosenIngredients;
+    }
+
+    public void setAddingComplete() {
+        addingComplete.postValue(true);
+    }
+
+    public LiveData<Boolean> isAddingComplete() {
+        return addingComplete;
     }
 }

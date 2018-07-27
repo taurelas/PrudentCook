@@ -1,7 +1,5 @@
 package com.leadinsource.prudentcook.model;
 
-import com.leadinsource.prudentcook.mainactivity.RVItem;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,11 +8,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class RecipeDataTest {
 
-    private RecipeData recipeDataUnderTest;
+    /*private RecipeData recipeDataUnderTest;
 
     @Before
     public void setUp() {
@@ -60,5 +59,5 @@ public class RecipeDataTest {
         ingredientData.setRequired(required);
 
         return ingredientData;
-    }
+    }*/
 }

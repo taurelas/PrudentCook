@@ -1,7 +1,6 @@
 package com.leadinsource.prudentcook.model;
 
 import com.leadinsource.prudentcook.mainactivity.RVItem;
-import com.leadinsource.prudentcook.model.Recipe;
 
 public class RVItemImpl implements RVItem{
 

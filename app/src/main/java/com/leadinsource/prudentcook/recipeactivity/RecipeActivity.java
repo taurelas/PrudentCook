@@ -35,6 +35,7 @@ public class RecipeActivity extends AppCompatActivity {
 
     public static final String EXTRA_RECIPE_NAME = "EXTRA_RECIPE_NAME";
     public static final String EXTRA_INGREDIENTS = "EXTRA_INGREDIENTS";
+    public static final String WIDGET_ACTION = "WIDGET_DATA";
     private TextView tvIngredients;
     private TextView tvSteps;
 
@@ -65,7 +66,7 @@ public class RecipeActivity extends AppCompatActivity {
             }
         });
 
-        if(intent.getAction()!=null && intent.getAction().equals("WIDGET_DATA")) {
+        if(intent.getAction()!=null && intent.getAction().equals(WIDGET_ACTION)) {
             recipeName = intent.getStringExtra(EXTRA_RECIPE_NAME);
             viewModel.setRecipe(recipeName);
         //    ingredients = intent.getStringExtra(EXTRA_INGREDIENTS);
@@ -78,7 +79,6 @@ public class RecipeActivity extends AppCompatActivity {
             viewModel.setRecipe(recipeName);
 
         }
-        Timber.d("Setting title 528491");
         setTitle(recipeName);
 
         fab = findViewById(R.id.fab);
@@ -87,7 +87,7 @@ public class RecipeActivity extends AppCompatActivity {
 
             @Override
             protected Void doInBackground(Void... voids) {
-                MobileAds.initialize(RecipeActivity.this, "ca-app-pub-1785118724408316~9524578956");
+                MobileAds.initialize(RecipeActivity.this, getString(R.string.admob_id));
                 //...
                 adView = findViewById(R.id.adView);
                 adRequest = new AdRequest.Builder().build();
@@ -100,7 +100,6 @@ public class RecipeActivity extends AppCompatActivity {
                 adView.loadAd(adRequest);
             }
         }.execute();
-        Timber.d("onCreate complete 528491");
     }
 
     @Override

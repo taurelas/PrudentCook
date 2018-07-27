@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,10 +33,6 @@ public class IngredientInputFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private static final String[] INGREDIENTS = new String[]{
-            "Basil", "Black Pepper", "Cardamom", "Chicken", "Eggs", "Flour", "Salt", "Zucchini"
-    };
-    private Ingredients ingredients;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -89,8 +86,17 @@ public class IngredientInputFragment extends Fragment {
                 viewModel.addChosenIngredient((String) parent.getItemAtPosition(position));
             }
         });
-
-        actvDataSetup(INGREDIENTS);
+        actv.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if((event.getAction()==KeyEvent.ACTION_DOWN) &&
+                        (keyCode == KeyEvent.KEYCODE_DPAD_CENTER)) {
+                    viewModel.setAddingComplete();
+                    return true;
+                }
+                return false;
+            }
+        });
         return rootView;
     }
 
@@ -103,7 +109,6 @@ public class IngredientInputFragment extends Fragment {
         viewModel.getAvailableIngredients().observe(this, new Observer<List<String>>() {
             @Override
             public void onChanged(@Nullable List<String> ingredients) {
-                Timber.d("Ingredients changed");
                 if(ingredients==null) return;
 
                 actvDataSetup(ingredients.toArray(new String[ingredients.size()]));
