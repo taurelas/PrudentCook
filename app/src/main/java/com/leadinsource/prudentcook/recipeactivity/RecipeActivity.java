@@ -10,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -29,15 +30,14 @@ import timber.log.Timber;
  */
 public class RecipeActivity extends AppCompatActivity {
 
+    public static final String EXTRA_RECIPE_NAME = "EXTRA_RECIPE_NAME";
+    public static final String EXTRA_INGREDIENTS = "EXTRA_INGREDIENTS";
+    public static final String WIDGET_ACTION = "WIDGET_DATA";
     private AdView adView;
     private AdRequest adRequest;
     private String recipeName;
     private String ingredients;
     private FloatingActionButton fab;
-
-    public static final String EXTRA_RECIPE_NAME = "EXTRA_RECIPE_NAME";
-    public static final String EXTRA_INGREDIENTS = "EXTRA_INGREDIENTS";
-    public static final String WIDGET_ACTION = "WIDGET_DATA";
     private TextView tvIngredients;
     private TextView tvSteps;
     private CollapsingToolbarLayout toolbar;
@@ -54,7 +54,7 @@ public class RecipeActivity extends AppCompatActivity {
         tvSteps = findViewById(R.id.tvSteps);
         Intent intent = getIntent();
 
-        if(intent==null) {
+        if (intent == null) {
             finish();
             return;
         }
@@ -62,7 +62,7 @@ public class RecipeActivity extends AppCompatActivity {
         viewModel.getRecipeData().observe(this, new Observer<RecipeData>() {
             @Override
             public void onChanged(@Nullable RecipeData recipeData) {
-                if(recipeData!=null) {
+                if (recipeData != null) {
                     ingredients = recipeData.getIngredientsString();
                     tvIngredients.setText(ingredients);
                     tvSteps.setText(recipeData.getSteps());
@@ -71,19 +71,17 @@ public class RecipeActivity extends AppCompatActivity {
             }
         });
 
-        if(intent.getAction()!=null && intent.getAction().equals(WIDGET_ACTION)) {
-            recipeName = intent.getStringExtra(EXTRA_RECIPE_NAME);
-            viewModel.setRecipe(recipeName);
-        //    ingredients = intent.getStringExtra(EXTRA_INGREDIENTS);
-
-//            Timber.d("Got: %s / %s", recipeName, ingredients);
-        } else {
-
-            recipeName = intent.getStringExtra(EXTRA_RECIPE_NAME);
-
-            viewModel.setRecipe(recipeName);
-
+        if (intent.getAction() != null && intent.getAction().equals(WIDGET_ACTION)) {
+            Timber.d("Got: %s / %s from widget", recipeName, ingredients);
         }
+
+        recipeName = intent.getStringExtra(EXTRA_RECIPE_NAME);
+        if (TextUtils.isEmpty(recipeName)) {
+            Timber.d("Wrong recipe name");
+            finish();
+        }
+        viewModel.setRecipe(recipeName);
+
         setTitle(recipeName);
 
         fab = findViewById(R.id.fab);
@@ -123,11 +121,11 @@ public class RecipeActivity extends AppCompatActivity {
 
     private void updateFabButton() {
         Timber.d("updateFabButton 528491");
-        if(FavoriteManager.isFavorite(this, recipeName)) {
+        if (FavoriteManager.isFavorite(this, recipeName)) {
             fab.setImageResource(R.drawable.ic_favorite_white_24dp);
         } else {
             fab.setImageResource(R.drawable.ic_favorite_border_white_24dp);
         }
-        Timber.d("updateFabButton finished 528491" );
+        Timber.d("updateFabButton finished 528491");
     }
 }

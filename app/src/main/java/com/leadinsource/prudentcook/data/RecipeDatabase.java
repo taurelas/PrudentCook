@@ -3,6 +3,7 @@ package com.leadinsource.prudentcook.data;
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -64,7 +65,7 @@ class RecipeDatabase {
 
         @Override
         public void onCancelled(@NonNull DatabaseError databaseError) {
-
+            Timber.d("Database error: %s", databaseError);
         }
     };
 

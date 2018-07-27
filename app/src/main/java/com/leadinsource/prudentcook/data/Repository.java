@@ -17,6 +17,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import timber.log.Timber;
+
 public class Repository implements RecipeDatabase.RepositoryCallback {
 
     private MutableLiveData<HashMap<String, RecipeData>> recipes = new MutableLiveData<>();
@@ -68,7 +70,6 @@ public class Repository implements RecipeDatabase.RepositoryCallback {
 
         Set<Ingredient> newSet = new HashSet<>();
 
-
         for (String key : recipes.keySet()) {
             RecipeData recipeData = recipes.get(key);
             newSet.addAll(recipeData.getIngredientsSet());
@@ -101,6 +102,11 @@ public class Repository implements RecipeDatabase.RepositoryCallback {
     }
 
     public LiveData<RecipeData> getData(String input) {
+        if(recipes.getValue()==null) {
+            Timber.d("Incorrectly formatted data");
+            return recipeDataLiveData;
+        }
+
         recipeDataLiveData.setValue(recipes.getValue().get(input));
         recipeName.postValue(input);
 
