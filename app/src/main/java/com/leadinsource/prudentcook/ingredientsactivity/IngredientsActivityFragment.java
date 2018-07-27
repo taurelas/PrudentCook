@@ -32,7 +32,6 @@ public class IngredientsActivityFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Timber.d("Creating ingredients");
         View rootView = inflater.inflate(R.layout.fragment_ingredients, container, false);
 
         recyclerView = rootView.findViewById(R.id.recyclerView);

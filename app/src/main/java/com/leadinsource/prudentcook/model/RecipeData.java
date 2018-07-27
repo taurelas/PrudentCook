@@ -30,6 +30,13 @@ public class RecipeData {
 
     public Set<Ingredient> getIngredientsSet() {
         Set<Ingredient> result = new HashSet<>();
+
+        if(ingredients==null) {
+            Timber.d("Invalid ingredients");
+            return result;
+        }
+
+
         for (String key : ingredients.keySet()) {
             result.add(new IngredientImpl(key, ingredients.get(key)));
         }
