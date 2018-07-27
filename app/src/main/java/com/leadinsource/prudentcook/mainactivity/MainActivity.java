@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
         model = ViewModelProviders.of(this).get(MainActivityViewModel.class);
 
         model.getMatches().observe(this, new Observer<List<RVItem>>() {
@@ -71,19 +71,10 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Floating Action Button");
-                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
-
                 Intent intent = new Intent(MainActivity.this, IngredientsActivity.class);
                 startActivityForResult(intent, INGREDIENT_REQUEST);
-
             }
         });
-
-        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         model.getChosenIngredients().observe(this, new Observer<ArrayList<String>>() {
             @Override
@@ -151,11 +142,22 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
             String[] chosenIngredients = data.getStringArrayExtra(EXTRA_CHOSEN_INGREDIENTS);
 
             if(chosenIngredients.length>0) {
+
+               sendItemsToAnalytics(chosenIngredients);
+
                 model.setChosenIngredients(new ArrayList<>(Arrays.asList(chosenIngredients)));
             } else {
                 Timber.d("No ingredients chosen");
             }
 
+        }
+    }
+
+    void sendItemsToAnalytics(String[] items) {
+        for(String item : items) {
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, item);
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_SEARCH_RESULTS, bundle);
         }
     }
 }
