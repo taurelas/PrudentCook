@@ -19,5 +19,6 @@
     <string name="firebase_top_level" translatable="false">recipes</string>
     <string name="transition_ingredients">transition_ingredients</string>
     <string name="transition_steps">transition_steps</string>
+    <string name="no_recipes_found">No recipes with this ingredient</string>
 
 </resources>

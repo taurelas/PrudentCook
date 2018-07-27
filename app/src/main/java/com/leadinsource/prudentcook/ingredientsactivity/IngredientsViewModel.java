@@ -13,6 +13,7 @@ import com.leadinsource.prudentcook.data.Repository;
 import com.leadinsource.prudentcook.model.Ingredient;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -21,7 +22,7 @@ import timber.log.Timber;
 public class IngredientsViewModel extends ViewModel {
 
     private final Repository repository;
-    private MediatorLiveData<List<String>> availableIngredients = new MediatorLiveData<>();
+    private MediatorLiveData<Set<String>> availableIngredients = new MediatorLiveData<>();
     private MutableLiveData<List<String>> chosenIngredients = new MutableLiveData<>();
     private MutableLiveData<Boolean> addingComplete = new MutableLiveData<>();
 
@@ -32,13 +33,13 @@ public class IngredientsViewModel extends ViewModel {
             @Override
             public void onChanged(@Nullable Set<Ingredient> ingredients) {
                 if(ingredients==null) {
-                    Timber.d("No ingredients in the database 528491");
+                    Timber.d("No ingredients in the database");
                     return;
                 }
-                Timber.d("Ingredients exist in the database 528491");
                 // converting to a list of strings, we only need this for the activity
-                List<String> ingredientsStringList = new ArrayList<>();
+                Set<String> ingredientsStringList = new HashSet<>();
                 for(Ingredient ingredient : ingredients) {
+                    Timber.d("adding to available ingredients: %s", ingredient.getName());
                     ingredientsStringList.add(ingredient.getName());
                 }
 
@@ -58,7 +59,7 @@ public class IngredientsViewModel extends ViewModel {
             @Override
             public void onChanged(@Nullable List<String> chosenIngredientsList) {
 
-                List<String> ingredientsStringList = availableIngredients.getValue();
+                Set<String> ingredientsStringList = availableIngredients.getValue();
 
                 if(ingredientsStringList==null) return;
 
@@ -73,7 +74,7 @@ public class IngredientsViewModel extends ViewModel {
     }
 
 
-    LiveData<List<String>> getAvailableIngredients() {
+    LiveData<Set<String>> getAvailableIngredients() {
 
         return availableIngredients;
     }

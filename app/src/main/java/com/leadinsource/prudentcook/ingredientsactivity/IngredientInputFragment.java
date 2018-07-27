@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import com.leadinsource.prudentcook.R;
 
 import java.util.List;
+import java.util.Set;
 
 import timber.log.Timber;
 
@@ -97,6 +99,7 @@ public class IngredientInputFragment extends Fragment {
                 return false;
             }
         });
+
         return rootView;
     }
 
@@ -106,9 +109,9 @@ public class IngredientInputFragment extends Fragment {
 
         viewModel = ViewModelProviders.of(getActivity()).get(IngredientsViewModel.class);
 
-        viewModel.getAvailableIngredients().observe(this, new Observer<List<String>>() {
+        viewModel.getAvailableIngredients().observe(this, new Observer<Set<String>>() {
             @Override
-            public void onChanged(@Nullable List<String> ingredients) {
+            public void onChanged(@Nullable Set<String> ingredients) {
                 if(ingredients==null) return;
 
                 actvDataSetup(ingredients.toArray(new String[ingredients.size()]));

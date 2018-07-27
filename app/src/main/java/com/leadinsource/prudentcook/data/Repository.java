@@ -70,7 +70,6 @@ public class Repository implements RecipeDatabase.RepositoryCallback {
 
         Set<Ingredient> newSet = new HashSet<>();
 
-
         for (String key : recipes.keySet()) {
             RecipeData recipeData = recipes.get(key);
             newSet.addAll(recipeData.getIngredientsSet());
