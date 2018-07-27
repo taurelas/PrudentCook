@@ -17,5 +17,7 @@
     <string name="choose_a_favorite_recipe_for_the_widget">Choose a favorite recipe for the widget</string>
     <string name="admob_id" translatable="false">ca-app-pub-1785118724408316~9524578956</string>
     <string name="firebase_top_level" translatable="false">recipes</string>
+    <string name="transition_ingredients">transition_ingredients</string>
+    <string name="transition_steps">transition_steps</string>
 
 </resources>

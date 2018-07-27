@@ -20,7 +20,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private final List<RVItem> items;
 
     interface OnClickListener {
-        void onClick(RVItem item);
+        void onClick(RVItem item, View[] sharedView);
     }
 
     RecyclerViewAdapter(List<RVItem> items, OnClickListener onClickListener) {
@@ -54,13 +54,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         private RvItemBinding binding;
 
-        ViewHolder(RvItemBinding binding) {
+        ViewHolder(final RvItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
             binding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onClickListener.onClick(items.get(getAdapterPosition()));
+                    onClickListener.onClick(items.get(getAdapterPosition()),
+                            new View[]{binding.tvIngredients, binding.tvExcerpt, binding.tvRecipeName});
                 }
             });
         }

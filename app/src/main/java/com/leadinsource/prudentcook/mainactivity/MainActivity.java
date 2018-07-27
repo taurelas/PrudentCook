@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -134,12 +135,14 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     }
 
     @Override
-    public void onClick(RVItem item) {
+    public void onClick(RVItem item, View[] view) {
         Intent intent = new Intent(MainActivity.this, RecipeActivity.class);
         intent.putExtra(EXTRA_RECIPE_NAME, item.getRecipeName());
         intent.putExtra(EXTRA_INGREDIENTS, item.getMissingIngredients());
         intent.putExtra(EXTRA_STEPS, item.getRecipeExcerpt());
-        Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this, null)
+        Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this,
+                        Pair.create(view[0], view[0].getTransitionName()),
+                        Pair.create(view[1], view[1].getTransitionName()))
                 .toBundle();
 
         startActivity(intent, bundle);
