@@ -13,6 +13,11 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="MainAcitivity" parent="AppTheme.NoActionBar">
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowExitTransition">@transition/exit</item>
+    </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
@@ -20,6 +25,14 @@
     <style name="RecipeWidget" >
         <item name="android:background">@color/primary_dark</item>
         <item name="android:textColor">@color/background</item>
+    </style>
+
+    <style name="ExpandedTitle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse">
+        <item name="android:textColor">@android:color/primary_text_dark</item>
+    </style>
+
+    <style name="CollapsedTitle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse">
+        <item name="android:textColor">@android:color/primary_text_dark</item>
     </style>
 
 </resources>

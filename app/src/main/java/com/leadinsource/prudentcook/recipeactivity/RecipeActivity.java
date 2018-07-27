@@ -5,9 +5,11 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
@@ -38,14 +40,16 @@ public class RecipeActivity extends AppCompatActivity {
     public static final String WIDGET_ACTION = "WIDGET_DATA";
     private TextView tvIngredients;
     private TextView tvSteps;
+    private CollapsingToolbarLayout toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
-        Timber.d("SetcontentView 528491");
         RecipeViewModel viewModel = ViewModelProviders.of(this).get(RecipeViewModel.class);
-        Timber.d("Got with the model 528491");
+
+        toolbar = findViewById(R.id.collapsing_toolbar_layout);
+
         tvIngredients = findViewById(R.id.tvIngredients);
         tvSteps = findViewById(R.id.tvSteps);
         Intent intent = getIntent();
@@ -62,6 +66,7 @@ public class RecipeActivity extends AppCompatActivity {
                     ingredients = recipeData.getIngredientsString();
                     tvIngredients.setText(ingredients);
                     tvSteps.setText(recipeData.getSteps());
+                    toolbar.setTitle(recipeName);
                 }
             }
         });
