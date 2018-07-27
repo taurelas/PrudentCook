@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -104,16 +105,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
 
                         }
                     });
-
-                   /* choice.setOnTouchListener(new View.OnTouchListener() {
-                        @Override
-                        public boolean onTouch(View v, MotionEvent event) {
-                            Timber.d("Onclick!");
-                            model.removeChosenIngredient(ingredientName);
-                            return false;
-                        }
-                    });*/
-                    Timber.d("Has onclicklisteners? %s", choice.hasOnClickListeners());
                     choiceLayout.addView(choice, flowLP);
                 }
             }
@@ -145,7 +136,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
 
     @Override
     public void onClick(RVItem item) {
-        Toast.makeText(this, "Clicked "+item.getRecipeName(), Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(MainActivity.this, RecipeActivity.class);
         intent.putExtra(EXTRA_RECIPE_NAME, item.getRecipeName());
         intent.putExtra(EXTRA_INGREDIENTS, item.getMissingIngredients());
@@ -159,8 +149,13 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
 
         if(requestCode==INGREDIENT_REQUEST) {
             String[] chosenIngredients = data.getStringArrayExtra(EXTRA_CHOSEN_INGREDIENTS);
-            //model.testData();
-            model.setChosenIngredients(new ArrayList<>(Arrays.asList(chosenIngredients)));
+
+            if(chosenIngredients.length>0) {
+                model.setChosenIngredients(new ArrayList<>(Arrays.asList(chosenIngredients)));
+            } else {
+                Timber.d("No ingredients chosen");
+            }
+
         }
     }
 }

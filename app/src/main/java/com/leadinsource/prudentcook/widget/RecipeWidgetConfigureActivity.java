@@ -1,4 +1,4 @@
-package com.leadinsource.prudentcook;
+package com.leadinsource.prudentcook.widget;
 
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.leadinsource.prudentcook.R;
 import com.leadinsource.prudentcook.data.FavoriteManager;
 
 import java.util.Set;

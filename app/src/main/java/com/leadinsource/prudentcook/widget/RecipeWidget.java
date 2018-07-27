@@ -1,4 +1,4 @@
-package com.leadinsource.prudentcook;
+package com.leadinsource.prudentcook.widget;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
 
+import com.leadinsource.prudentcook.R;
 import com.leadinsource.prudentcook.data.FavoriteManager;
 import com.leadinsource.prudentcook.recipeactivity.RecipeActivity;
 
@@ -14,6 +15,7 @@ import timber.log.Timber;
 
 import static com.leadinsource.prudentcook.recipeactivity.RecipeActivity.EXTRA_INGREDIENTS;
 import static com.leadinsource.prudentcook.recipeactivity.RecipeActivity.EXTRA_RECIPE_NAME;
+import static com.leadinsource.prudentcook.recipeactivity.RecipeActivity.WIDGET_ACTION;
 
 /**
  * Implementation of App Widget functionality.
@@ -32,7 +34,7 @@ public class RecipeWidget extends AppWidgetProvider {
         Intent intent = new Intent(context, RecipeActivity.class);
         intent.putExtra(EXTRA_RECIPE_NAME, recipeName);
         intent.putExtra(EXTRA_INGREDIENTS, ingredients);
-        intent.setAction("WIDGET_DATA");
+        intent.setAction(WIDGET_ACTION);
         Timber.d("check Intent: %s / %s", intent.getStringExtra(EXTRA_RECIPE_NAME),intent.getStringExtra(EXTRA_INGREDIENTS));
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
         views.setOnClickPendingIntent(R.id.tvWidgetIngredients, pendingIntent);
