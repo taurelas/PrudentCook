@@ -6,14 +6,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.transition.Explode;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -49,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         //...
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         recyclerView = findViewById(R.id.recyclerView);
@@ -72,7 +77,11 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, IngredientsActivity.class);
-                startActivityForResult(intent, INGREDIENT_REQUEST);
+
+                Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this, null)
+                        .toBundle();
+
+                startActivityForResult(intent, INGREDIENT_REQUEST, bundle);
             }
         });
 
@@ -103,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
 
     }
 
-    @Override
+   /* @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -123,15 +132,20 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
     @Override
-    public void onClick(RVItem item) {
+    public void onClick(RVItem item, View[] view) {
         Intent intent = new Intent(MainActivity.this, RecipeActivity.class);
         intent.putExtra(EXTRA_RECIPE_NAME, item.getRecipeName());
         intent.putExtra(EXTRA_INGREDIENTS, item.getMissingIngredients());
         intent.putExtra(EXTRA_STEPS, item.getRecipeExcerpt());
-        startActivity(intent);
+        Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this,
+                        Pair.create(view[0], view[0].getTransitionName()),
+                        Pair.create(view[1], view[1].getTransitionName()))
+                .toBundle();
+
+        startActivity(intent, bundle);
     }
 
     @Override
@@ -141,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         if(requestCode==INGREDIENT_REQUEST) {
             String[] chosenIngredients = data.getStringArrayExtra(EXTRA_CHOSEN_INGREDIENTS);
 
-            if(chosenIngredients.length>0) {
+            if(chosenIngredients!=null && chosenIngredients.length>0) {
 
                sendItemsToAnalytics(chosenIngredients);
 
