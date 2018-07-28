@@ -73,9 +73,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
                 if (items!=null) {
                     recyclerView.setAdapter(new RecyclerViewAdapter(items, MainActivity.this));
                     if (recyclerViewState!=null && items.size()>0) {
-                        Timber.d("onSaveInstanceState onRestoreInstanceState recyclerViewState");
                         recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
-                        Timber.d("state: %s", recyclerViewState);
                         recyclerViewState = null;
                     }
                 }
