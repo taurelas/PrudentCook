@@ -17,6 +17,8 @@ import com.leadinsource.prudentcook.data.FavoriteManager;
 
 import java.util.Set;
 
+import timber.log.Timber;
+
 /**
  * The configuration screen for the {@link RecipeWidget RecipeWidget} AppWidget.
  */
@@ -46,7 +48,7 @@ public class RecipeWidgetConfigureActivity extends Activity {
         if (titleValue != null) {
             return titleValue;
         } else {
-            return context.getString(R.string.appwidget_text);
+            return "";
         }
     }
 
@@ -85,6 +87,7 @@ public class RecipeWidgetConfigureActivity extends Activity {
                 // When the button is clicked, store the string locally
 
                 String widgetText = favoritesArray[position];
+                Timber.d("528491 Storing %s for widget %s", widgetText, mAppWidgetId);
                 saveTitlePref(context, mAppWidgetId, widgetText);
 
                 // It is the responsibility of the configuration activity to update the app widget

@@ -131,15 +131,12 @@ public class Repository implements RecipeDatabase.RepositoryCallback {
         return matches;
     }
 
-    public LiveData<RecipeData> getData(String input) {
-        if(recipes.getValue()==null) {
-            Timber.d("Incorrectly formatted data");
-            return recipeDataLiveData;
-        }
-
-        recipeDataLiveData.setValue(recipes.getValue().get(input));
-        recipeName.postValue(input);
+    public LiveData<RecipeData> getData() {
 
         return recipeDataLiveData;
+    }
+
+    public void setRecipe(String recipeName) {
+        this.recipeName.postValue(recipeName);
     }
 }

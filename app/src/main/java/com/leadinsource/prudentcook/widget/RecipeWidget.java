@@ -25,7 +25,9 @@ public class RecipeWidget extends AppWidgetProvider {
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
+        Timber.d("528491 Updating widget no %s", appWidgetId);
         CharSequence recipeName = RecipeWidgetConfigureActivity.loadTitlePref(context, appWidgetId);
+        if(recipeName.length()==0) return;
         String ingredients = FavoriteManager.getIngredients(context, recipeName.toString());
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget);
@@ -35,9 +37,10 @@ public class RecipeWidget extends AppWidgetProvider {
         intent.putExtra(EXTRA_RECIPE_NAME, recipeName);
         intent.putExtra(EXTRA_INGREDIENTS, ingredients);
         intent.setAction(WIDGET_ACTION);
-        Timber.d("check Intent: %s / %s", intent.getStringExtra(EXTRA_RECIPE_NAME),intent.getStringExtra(EXTRA_INGREDIENTS));
+        Timber.d("528491 Updating widget no %s", appWidgetId);
+        Timber.d("528491 check Intent: %s / %s", intent.getStringExtra(EXTRA_RECIPE_NAME),intent.getStringExtra(EXTRA_INGREDIENTS));
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-        views.setOnClickPendingIntent(R.id.tvWidgetIngredients, pendingIntent);
+        views.setOnClickPendingIntent(R.id.widgetLayout, pendingIntent);
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }

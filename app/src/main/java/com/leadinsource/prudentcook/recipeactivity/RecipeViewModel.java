@@ -19,12 +19,7 @@ public class RecipeViewModel extends ViewModel {
 
     public RecipeViewModel() {
         repository = Repository.getInstance();
-        recipeDataLiveData = Transformations.switchMap(recipeName, new Function<String, LiveData<RecipeData>>() {
-            @Override
-            public LiveData<RecipeData> apply(String input) {
-                return repository.getData(input);
-            }
-        });
+        recipeDataLiveData = repository.getData();
     }
 
     public LiveData<RecipeData> getRecipeData() {
@@ -32,7 +27,8 @@ public class RecipeViewModel extends ViewModel {
     }
 
     public void setRecipe(String recipeName) {
-        this.recipeName.postValue(recipeName);
+        repository.setRecipe(recipeName);
+        //this.recipeName.postValue(recipeName);
     }
 
 }
