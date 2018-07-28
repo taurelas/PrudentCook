@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -40,12 +41,13 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
 
     public static final String EXTRA_STEPS = "EXTRA_STEPS";
     public static final String EXTRA_CHOSEN_INGREDIENTS = "EXTRA_CHOSEN_INGREDIENTS";
+    private static final String RV = "RV";
 
     private FirebaseAnalytics firebaseAnalytics;
     private FlowLayout choiceLayout;
     private RecyclerView recyclerView;
     private MainActivityViewModel model;
-
+    private Parcelable recyclerViewState;
     private FlowLayout.LayoutParams flowLP;
 
     @Override
@@ -53,25 +55,35 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         //...
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        model = ViewModelProviders.of(this).get(MainActivityViewModel.class);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        if(savedInstanceState!=null) {
+            Timber.d("onSaveInstanceState onCreate");
+            model.restoreState(savedInstanceState);
+        }
+
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         firebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        model = ViewModelProviders.of(this).get(MainActivityViewModel.class);
 
         model.getMatches().observe(this, new Observer<List<RVItem>>() {
             @Override
             public void onChanged(@Nullable List<RVItem> items) {
                 if (items!=null) {
                     recyclerView.setAdapter(new RecyclerViewAdapter(items, MainActivity.this));
+                    if (recyclerViewState!=null && items.size()>0) {
+                        Timber.d("onSaveInstanceState onRestoreInstanceState recyclerViewState");
+                        recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
+                        Timber.d("state: %s", recyclerViewState);
+                        recyclerViewState = null;
+                    }
                 }
             }
         });
 
         choiceLayout = findViewById(R.id.choices);
+
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,6 +121,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
                 }
             }
         });
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
     }
 
@@ -172,6 +186,25 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
             Bundle bundle = new Bundle();
             bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, item);
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_SEARCH_RESULTS, bundle);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Timber.d("onSaveInstanceState");
+        outState.putParcelable(RV, recyclerView.getLayoutManager().onSaveInstanceState());
+        model.saveState(outState);
+
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Timber.d("onSaveInstanceState onRestoreInstanceState");
+        if(savedInstanceState!=null) {
+            recyclerViewState = savedInstanceState.getParcelable(RV);
+
         }
     }
 }

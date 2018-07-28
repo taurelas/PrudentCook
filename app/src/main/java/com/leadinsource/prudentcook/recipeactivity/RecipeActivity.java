@@ -33,6 +33,7 @@ public class RecipeActivity extends AppCompatActivity {
     public static final String EXTRA_RECIPE_NAME = "EXTRA_RECIPE_NAME";
     public static final String EXTRA_INGREDIENTS = "EXTRA_INGREDIENTS";
     public static final String WIDGET_ACTION = "WIDGET_DATA";
+    private static final String SAVED_RECIPE_NAME = "SAVED_RECIPE_NAME";
     private AdView adView;
     private AdRequest adRequest;
     private String recipeName;
@@ -54,11 +55,28 @@ public class RecipeActivity extends AppCompatActivity {
         tvSteps = findViewById(R.id.tvSteps);
         Intent intent = getIntent();
 
-        if (intent == null) {
-            finish();
-            return;
+        if(savedInstanceState==null) {
+            if (intent == null) {
+                finish();
+                return;
+            } else {
+                recipeName = intent.getStringExtra(EXTRA_RECIPE_NAME);
+                if (intent.getAction() != null && intent.getAction().equals(WIDGET_ACTION)) {
+                    Timber.d("Got: %s from widget", recipeName);
+                } else {
+                    Timber.d("Got: %s from another Activity", recipeName);
+                }
+            }
+        } else {
+            recipeName = savedInstanceState.getString(SAVED_RECIPE_NAME);
         }
 
+        if (TextUtils.isEmpty(recipeName)) {
+            finish();
+        }
+
+        viewModel.setRecipe(recipeName);
+        setTitle(recipeName);
         viewModel.getRecipeData().observe(this, new Observer<RecipeData>() {
             @Override
             public void onChanged(@Nullable RecipeData recipeData) {
@@ -70,19 +88,6 @@ public class RecipeActivity extends AppCompatActivity {
                 }
             }
         });
-
-        if (intent.getAction() != null && intent.getAction().equals(WIDGET_ACTION)) {
-            Timber.d("Got: %s / %s from widget", recipeName, ingredients);
-        }
-
-        recipeName = intent.getStringExtra(EXTRA_RECIPE_NAME);
-        if (TextUtils.isEmpty(recipeName)) {
-            Timber.d("Wrong recipe name");
-            finish();
-        }
-        viewModel.setRecipe(recipeName);
-
-        setTitle(recipeName);
 
         fab = findViewById(R.id.fab);
 
@@ -108,9 +113,7 @@ public class RecipeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Timber.d("onResume in the midst 528491");
         updateFabButton();
-        Timber.d("onResume completed 528491");
 
     }
 
@@ -120,12 +123,16 @@ public class RecipeActivity extends AppCompatActivity {
     }
 
     private void updateFabButton() {
-        Timber.d("updateFabButton 528491");
         if (FavoriteManager.isFavorite(this, recipeName)) {
             fab.setImageResource(R.drawable.ic_favorite_white_24dp);
         } else {
             fab.setImageResource(R.drawable.ic_favorite_border_white_24dp);
         }
-        Timber.d("updateFabButton finished 528491");
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(SAVED_RECIPE_NAME, recipeName);
     }
 }

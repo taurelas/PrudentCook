@@ -7,6 +7,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.leadinsource.prudentcook.data.Repository;
@@ -21,6 +22,7 @@ import timber.log.Timber;
 
 public class IngredientsViewModel extends ViewModel {
 
+    private static final String SAVED_CHOSEN_INGREDIENTS = "SAVED_CHOSEN_INGREDIENTS";
     private final Repository repository;
     private MediatorLiveData<Set<String>> availableIngredients = new MediatorLiveData<>();
     private MutableLiveData<List<String>> chosenIngredients = new MutableLiveData<>();
@@ -100,5 +102,17 @@ public class IngredientsViewModel extends ViewModel {
 
     public LiveData<Boolean> isAddingComplete() {
         return addingComplete;
+    }
+
+    public void saveState(Bundle outState) {
+        if (chosenIngredients.getValue()!=null) {
+            outState.putStringArrayList(SAVED_CHOSEN_INGREDIENTS, new ArrayList<>(chosenIngredients.getValue()));
+        }
+    }
+
+    public void restoreState(Bundle inState) {
+        if(chosenIngredients.getValue()==null) {
+            chosenIngredients.postValue(inState.getStringArrayList(SAVED_CHOSEN_INGREDIENTS));
+        }
     }
 }

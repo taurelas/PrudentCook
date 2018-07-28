@@ -17,6 +17,8 @@ import com.leadinsource.prudentcook.data.FavoriteManager;
 
 import java.util.Set;
 
+import timber.log.Timber;
+
 /**
  * The configuration screen for the {@link RecipeWidget RecipeWidget} AppWidget.
  */
@@ -46,7 +48,7 @@ public class RecipeWidgetConfigureActivity extends Activity {
         if (titleValue != null) {
             return titleValue;
         } else {
-            return context.getString(R.string.appwidget_text);
+            return "";
         }
     }
 
