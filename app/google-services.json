@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "837960749949",
+    "firebase_url": "https://prudentcook-e7d75.firebaseio.com",
+    "project_id": "prudentcook-e7d75",
+    "storage_bucket": "prudentcook-e7d75.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:837960749949:android:b47518fa0acb3cff",
+        "android_client_info": {
+          "package_name": "com.leadinsource.prudentcook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "837960749949-t0rq11si90pvhet299v01v3v51tokooq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.leadinsource.prudentcook",
+            "certificate_hash": "70e38c74f45e0b24c6105dfe6b0f59f19efccdf7"
+          }
+        },
+        {
+          "client_id": "837960749949-gg81qj81eso2i6jadironii1vjs91ll0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAE6o3IztFYEj_e4T23v35noZ_04JbaGRQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "837960749949-gg81qj81eso2i6jadironii1vjs91ll0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
