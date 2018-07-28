@@ -56,38 +56,30 @@ public class RecipeActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         if(savedInstanceState==null) {
-            Timber.d("528491 SavedInstanceState is null");
             if (intent == null) {
-                Timber.d("528491 Intent is null, finishing activity");
                 finish();
                 return;
             } else {
                 recipeName = intent.getStringExtra(EXTRA_RECIPE_NAME);
                 if (intent.getAction() != null && intent.getAction().equals(WIDGET_ACTION)) {
-                    Timber.d("528491 Got: %s from widget", recipeName);
+                    Timber.d("Got: %s from widget", recipeName);
                 } else {
-                    Timber.d("528491 Got: %s from another Activity", recipeName);
+                    Timber.d("Got: %s from another Activity", recipeName);
                 }
             }
         } else {
-            Timber.d("528491 SavedInstanceState is not null");
-            Timber.d("528491 Got: %s from savedInstanceState", recipeName);
             recipeName = savedInstanceState.getString(SAVED_RECIPE_NAME);
         }
 
         if (TextUtils.isEmpty(recipeName)) {
-            Timber.d("528491 Wrong recipe name");
             finish();
         }
 
         viewModel.setRecipe(recipeName);
-        Timber.d("528491 passed to viewmodel got %s", recipeName);
         setTitle(recipeName);
-        Timber.d("528491 title set %s", getTitle());
         viewModel.getRecipeData().observe(this, new Observer<RecipeData>() {
             @Override
             public void onChanged(@Nullable RecipeData recipeData) {
-                Timber.d("528491 recipeData is changed to %s", recipeData);
                 if (recipeData != null) {
                     ingredients = recipeData.getIngredientsString();
                     tvIngredients.setText(ingredients);

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -32,6 +33,10 @@ public class IngredientsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ingredients);
         //getActionBar().setDisplayHomeAsUpEnabled(true);
         viewModel = ViewModelProviders.of(this).get(IngredientsViewModel.class);
+
+        if(savedInstanceState!=null) {
+            viewModel.restoreState(savedInstanceState);
+        }
 
         viewModel.isAddingComplete().observe(this, new Observer<Boolean>() {
             @Override
@@ -68,5 +73,11 @@ public class IngredientsActivity extends AppCompatActivity {
         setResult(RESULT_OK, intentWithIngredients);
 
         finish();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        viewModel.saveState(outState);
     }
 }

@@ -25,7 +25,7 @@ public class RecipeWidget extends AppWidgetProvider {
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
-        Timber.d("528491 Updating widget no %s", appWidgetId);
+        Timber.d("Updating widget no %s", appWidgetId);
         CharSequence recipeName = RecipeWidgetConfigureActivity.loadTitlePref(context, appWidgetId);
         if(recipeName.length()==0) return;
         String ingredients = FavoriteManager.getIngredients(context, recipeName.toString());
@@ -37,8 +37,6 @@ public class RecipeWidget extends AppWidgetProvider {
         intent.putExtra(EXTRA_RECIPE_NAME, recipeName);
         intent.putExtra(EXTRA_INGREDIENTS, ingredients);
         intent.setAction(WIDGET_ACTION);
-        Timber.d("528491 Updating widget no %s", appWidgetId);
-        Timber.d("528491 check Intent: %s / %s", intent.getStringExtra(EXTRA_RECIPE_NAME),intent.getStringExtra(EXTRA_INGREDIENTS));
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
         views.setOnClickPendingIntent(R.id.widgetLayout, pendingIntent);
         // Instruct the widget manager to update the widget
