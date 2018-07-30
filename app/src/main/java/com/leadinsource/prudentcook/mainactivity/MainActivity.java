@@ -13,12 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.transition.Explode;
-import android.util.Log;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.Window;
 import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -75,6 +70,9 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
                     if (recyclerViewState!=null && items.size()>0) {
                         recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
                         recyclerViewState = null;
+                    }
+                    if(items.size()==0) {
+                        Toast.makeText(MainActivity.this, R.string.no_results_found, Toast.LENGTH_LONG).show();
                     }
                 }
             }
