@@ -62,7 +62,7 @@ public class IngredientsActivity extends AppCompatActivity {
         return true;
     }
 
-    void submitAndFinish() {
+    private void submitAndFinish() {
         Intent intentWithIngredients = new Intent();
 
         List<String> chosenIngredients = viewModel.getChosenIngredients().getValue();
